@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "verblijf": "Unterkünfte",
+    "boerderij": "Der Bauernhof",
+    "omgeving": "Umgebung",
+    "praktisch": "Praktisches",
+    "plattegrond": "Lageplan",
+    "blog": "Aktuelles",
+    "contact": "Kontakt",
+    "boek": "Jetzt buchen",
+    "tel": "0321-317669"
+  },
+  "common": {
+    "vanafPerNacht": "ab {prijs} pro Nacht",
+    "leesMeer": "Mehr lesen",
+    "bekijk": "Ansehen",
+    "boekDirect": "Direkt buchen",
+    "alleAccommodaties": "Alle Unterkünfte",
+    "ontdekDeBeleving": "Erlebnis entdecken",
+    "ontdekOnsVerhaal": "Unsere Geschichte",
+    "bekijkOmgeving": "Umgebung ansehen"
+  },
+  "footer": {
+    "adres": "Adresse",
+    "contact": "Kontakt",
+    "volgOns": "Folgen Sie uns",
+    "info": "Informationen",
+    "privacy": "Datenschutz",
+    "cookies": "Cookies",
+    "sitemap": "Sitemap",
+    "kvk": "KvK 65548221",
+    "leden": "Mitglied bei"
+  }
+}

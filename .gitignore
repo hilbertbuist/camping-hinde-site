@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# payload database (lokaal SQLite — productie gebruikt Postgres)
+payload.db
+payload.db-journal
+*.sqlite
+*.sqlite3
+
+# payload media uploads (lokaal opgeslagen, productie gebruikt Vercel Blob/S3)
+/media
+
+# os
+Thumbs.db
+desktop.ini

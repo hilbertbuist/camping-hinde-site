@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "verblijf": "Stay",
+    "boerderij": "The farm",
+    "omgeving": "Surroundings",
+    "praktisch": "Practical",
+    "plattegrond": "Map",
+    "blog": "News",
+    "contact": "Contact",
+    "boek": "Book now",
+    "tel": "+31 321 317669"
+  },
+  "common": {
+    "vanafPerNacht": "from {prijs} per night",
+    "leesMeer": "Read more",
+    "bekijk": "View",
+    "boekDirect": "Book directly",
+    "alleAccommodaties": "All accommodations",
+    "ontdekDeBeleving": "Discover the experience",
+    "ontdekOnsVerhaal": "Read our story",
+    "bekijkOmgeving": "Explore the area"
+  },
+  "footer": {
+    "adres": "Address",
+    "contact": "Contact",
+    "volgOns": "Follow us",
+    "info": "Information",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "sitemap": "Sitemap",
+    "kvk": "Chamber of Commerce 65548221",
+    "leden": "Member of"
+  }
+}

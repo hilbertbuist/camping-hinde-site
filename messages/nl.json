@@ -1,0 +1,35 @@
+{
+  "nav": {
+    "home": "Home",
+    "verblijf": "Verblijf",
+    "boerderij": "De boerderij",
+    "omgeving": "Omgeving",
+    "praktisch": "Praktisch",
+    "plattegrond": "Plattegrond",
+    "blog": "Nieuws",
+    "contact": "Contact",
+    "boek": "Boek nu",
+    "tel": "0321-317669"
+  },
+  "common": {
+    "vanafPerNacht": "vanaf {prijs} per nacht",
+    "leesMeer": "Lees meer",
+    "bekijk": "Bekijken",
+    "boekDirect": "Boek direct",
+    "alleAccommodaties": "Alle accommodaties",
+    "ontdekDeBeleving": "Ontdek de beleving",
+    "ontdekOnsVerhaal": "Lees ons verhaal",
+    "bekijkOmgeving": "Bekijk de omgeving"
+  },
+  "footer": {
+    "adres": "Adres",
+    "contact": "Contact",
+    "volgOns": "Volg ons",
+    "info": "Informatie",
+    "privacy": "Privacyverklaring",
+    "cookies": "Cookies",
+    "sitemap": "Sitemap",
+    "kvk": "KvK 65548221",
+    "leden": "Aangesloten bij"
+  }
+}
