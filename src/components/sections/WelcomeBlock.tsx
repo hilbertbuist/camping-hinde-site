@@ -29,29 +29,45 @@ export function WelcomeBlock() {
         </div>
 
         <div className="welcome-collage">
-          {/* Grote feature: René & Dora — past bij "groet, René & Dora" onderaan */}
+          {/* p1 — grote portrait links: kampeerveld met gezin */}
           <div
             className="ph p1"
-            style={{
-              backgroundImage:
-                "url('/images/photos/rene-en-dora-buist.jpg')",
-              backgroundPosition: "center 30%",
-            }}
-          />
-          {/* Rechtsboven: gezin op het kampeerveld (sfeer + plek) */}
-          <div
-            className="ph p2"
             style={{
               backgroundImage:
                 "url('/images/photos/kampeerveld-gezin.jpg')",
             }}
           />
-          {/* Rechtsonder: kind met geit (interactie met de dieren) */}
+          {/* p2 — wide landscape rechtsboven: René & Dora (beiden zichtbaar) */}
+          <div
+            className="ph p2"
+            style={{
+              backgroundImage:
+                "url('/images/photos/rene-en-dora-buist.jpg')",
+              backgroundPosition: "center center",
+            }}
+          />
+          {/* p3 — vierkant midden: geit verzorgen */}
           <div
             className="ph p3"
             style={{
               backgroundImage:
                 "url('/images/photos/geit-verzorgen.jpg')",
+            }}
+          />
+          {/* p4 — landscape onder: speeltijd */}
+          <div
+            className="ph p4"
+            style={{
+              backgroundImage:
+                "url('/images/photos/speeltijd.jpg')",
+            }}
+          />
+          {/* p5 — smalle portrait rechts: skelter */}
+          <div
+            className="ph p5"
+            style={{
+              backgroundImage:
+                "url('/images/photos/skelter.jpg')",
             }}
           />
           <div className="collage-stamp">
