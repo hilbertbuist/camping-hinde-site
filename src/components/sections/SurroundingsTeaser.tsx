@@ -50,24 +50,58 @@ export function SurroundingsTeaser() {
           </Link>
         </div>
 
-        <div className="map-stack" aria-hidden="true">
-          <div className="mapbg" style={{ backgroundImage: "url('https://campingdehinde.nl/WP/wp-content/uploads/2016/04/Dronterstrand.jpg')" }}></div>
-          <div className="map-pin you" style={{ top: "52%", left: "40%" }}>
+        <div className="map-stack" style={{ background: "transparent" }}>
+          {/* Echte kaart van het gebied rond De Hinde, gecentreerd op
+              Stobbenweg 6 Dronten met Veluwemeer, Elburg en bossen zichtbaar */}
+          <iframe
+            title="Kaart van De Hinde en omgeving"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=5.55%2C52.47%2C5.85%2C52.59&amp;layer=mapnik&amp;marker=52.5286%2C5.6603"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              border: 0,
+              borderRadius: 24,
+            }}
+          />
+          {/* "Hier zijn wij"-pin overlay bovenop de kaart */}
+          <div
+            className="map-pin you"
+            style={{
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -100%)",
+              pointerEvents: "none",
+            }}
+          >
             <div className="pin"></div>
             <span>De Hinde</span>
           </div>
-          <div className="map-pin" style={{ top: "28%", left: "22%" }}>
-            <div className="pin"></div>
-            <span>Roggebot · 3 km</span>
-          </div>
-          <div className="map-pin" style={{ top: "38%", left: "68%" }}>
-            <div className="pin"></div>
-            <span>Veluwemeer · 4 km</span>
-          </div>
-          <div className="map-pin" style={{ top: "76%", left: "60%" }}>
-            <div className="pin"></div>
-            <span>Elburg · 8 km</span>
-          </div>
+          {/* Link naar grote kaart voor wie meer wil zien */}
+          <a
+            href="https://www.openstreetmap.org/?mlat=52.5286&amp;mlon=5.6603#map=12/52.530/5.700"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              position: "absolute",
+              right: 16,
+              bottom: 16,
+              background: "rgba(255,255,255,.92)",
+              padding: "8px 14px",
+              borderRadius: 999,
+              fontSize: 13,
+              fontWeight: 600,
+              color: "var(--paars)",
+              boxShadow: "0 4px 12px rgba(0,0,0,.15)",
+              textDecoration: "none",
+              zIndex: 4,
+            }}
+          >
+            Open in kaart →
+          </a>
         </div>
       </div>
     </section>
