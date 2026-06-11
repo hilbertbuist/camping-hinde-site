@@ -33,35 +33,35 @@ export function WelcomeBlock() {
             className="ph p1"
             style={{
               backgroundImage:
-                "url('https://campingdehinde.nl/WP/wp-content/uploads/2019/02/Lente.jpg')",
+                "url('/images/photos/rene-en-dora-buist.jpg')",
             }}
           />
           <div
             className="ph p2"
             style={{
               backgroundImage:
-                "url('https://campingdehinde.nl/WP/wp-content/uploads/2021/04/Etjes2-300x231.jpg')",
+                "url('/images/photos/kampeerveld-gezin.jpg')",
             }}
           />
           <div
             className="ph p3"
             style={{
               backgroundImage:
-                "url('https://campingdehinde.nl/WP/wp-content/uploads/2019/02/Konijn-aaien.jpg')",
+                "url('/images/photos/geit-verzorgen.jpg')",
             }}
           />
           <div
             className="ph p4"
             style={{
               backgroundImage:
-                "url('https://campingdehinde.nl/WP/wp-content/uploads/2019/02/Pony.jpg')",
+                "url('/images/photos/speeltijd.jpg')",
             }}
           />
           <div
             className="ph p5"
             style={{
               backgroundImage:
-                "url('https://campingdehinde.nl/WP/wp-content/uploads/2019/02/Geit-aaien.jpg')",
+                "url('/images/photos/skelter.jpg')",
             }}
           />
           <div className="collage-stamp">

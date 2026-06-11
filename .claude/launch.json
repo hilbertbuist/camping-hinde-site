@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Next.js dev server (homepage + admin + winkel)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "cwd": "hinde-site"
+    },
+    {
+      "name": "Next.js production build (lokaal)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"],
+      "port": 3000,
+      "cwd": "hinde-site"
+    },
+    {
+      "name": "Next.js production server (na build)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "port": 3000,
+      "cwd": "hinde-site"
+    }
+  ]
+}
