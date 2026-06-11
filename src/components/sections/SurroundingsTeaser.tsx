@@ -24,9 +24,9 @@ export function SurroundingsTeaser() {
               <span className="dist">3 km</span>
             </li>
             <li>
-              <span className="name">Veluwemeer <small>strand &amp; zwemmen</small></span>
+              <span className="name">Veluwemeer &amp; beachclub <small>strand &amp; zwemmen</small></span>
               <span className="dots"></span>
-              <span className="dist">4 km</span>
+              <span className="dist">8 km</span>
             </li>
             <li>
               <span className="name">Elburg <small>vestingstadje</small></span>
