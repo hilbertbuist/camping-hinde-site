@@ -14,7 +14,7 @@ export function SurroundingsTeaser() {
               <span className="dist">1 km</span>
             </li>
             <li>
-              <span className="name">Drontermeer &amp; strand <small>zwemmen en suppen</small></span>
+              <span className="name">Drontermeer &amp; strand <small>zwemmen, suppen &amp; beachclub</small></span>
               <span className="dots"></span>
               <span className="dist">2 km</span>
             </li>
