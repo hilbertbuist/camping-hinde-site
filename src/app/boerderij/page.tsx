@@ -230,19 +230,13 @@ export default function BoerderijPage() {
               href="https://www.inhetgroen.nl"
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                background: "white",
-                padding: "10px 16px",
-                borderRadius: 10,
-                display: "inline-block",
-                boxShadow: "0 4px 12px rgba(0,0,0,.06)",
-              }}
+              style={{ display: "inline-block" }}
               aria-label="In het Groen — onze vakorganisatie"
             >
               <img
-                src="/in-het-groen-logo.png"
+                src="/in-het-groen-geel.png"
                 alt="In het Groen"
-                style={{ display: "block", height: 40, width: "auto" }}
+                style={{ display: "block", height: 56, width: "auto" }}
               />
             </a>
             <a

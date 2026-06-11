@@ -49,25 +49,31 @@ export function Footer() {
               Flevoland. Negentien kampeerplekken, drie safaritenten en twee
               houten hutten. Drie generaties boerenleven.
             </p>
-            <div className="partners">
+            <div className="partners" style={{ flexDirection: "column", alignItems: "flex-start", gap: 8 }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  letterSpacing: ".14em",
+                  textTransform: "uppercase",
+                  color: "rgba(255,255,255,.55)",
+                  fontWeight: 600,
+                }}
+              >
+                Aangesloten bij
+              </span>
               <a
                 href="https://www.inhetgroen.nl"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="In het Groen — onze vakorganisatie"
-                style={{
-                  display: "inline-block",
-                  background: "white",
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                }}
+                style={{ display: "inline-block" }}
               >
                 <Image
-                  src="/in-het-groen-logo.png"
+                  src="/in-het-groen-wit.png"
                   alt="In het Groen"
-                  width={120}
-                  height={50}
-                  style={{ display: "block", height: 40, width: "auto" }}
+                  width={180}
+                  height={60}
+                  style={{ display: "block", height: 44, width: "auto" }}
                 />
               </a>
             </div>
