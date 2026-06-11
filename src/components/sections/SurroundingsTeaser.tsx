@@ -9,6 +9,11 @@ export function SurroundingsTeaser() {
           <h2 className="section-h">5 minuten op de fiets en je staat met je voeten in het water</h2>
           <ul className="omg-list">
             <li>
+              <span className="name">Abbertbos &amp; Revebos <small>bos &amp; routes</small></span>
+              <span className="dots"></span>
+              <span className="dist">1 km</span>
+            </li>
+            <li>
               <span className="name">Drontermeer &amp; strand <small>zwemmen en suppen</small></span>
               <span className="dots"></span>
               <span className="dist">2 km</span>
@@ -22,11 +27,6 @@ export function SurroundingsTeaser() {
               <span className="name">Veluwemeer <small>strand &amp; zwemmen</small></span>
               <span className="dots"></span>
               <span className="dist">4 km</span>
-            </li>
-            <li>
-              <span className="name">Abbertbos &amp; Revebos <small>bos &amp; routes</small></span>
-              <span className="dots"></span>
-              <span className="dist">5 km</span>
             </li>
             <li>
               <span className="name">Elburg <small>vestingstadje</small></span>
