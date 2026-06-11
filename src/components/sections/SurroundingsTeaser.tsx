@@ -19,7 +19,7 @@ export function SurroundingsTeaser() {
               <span className="dist">2 km</span>
             </li>
             <li>
-              <span className="name">Bos van Roggebot <small>fietsen &amp; wandelen</small></span>
+              <span className="name">Bos van Roggebot <small>wandelen &amp; mountainbiken</small></span>
               <span className="dots"></span>
               <span className="dist">3 km</span>
             </li>
