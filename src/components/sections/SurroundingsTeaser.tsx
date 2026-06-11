@@ -9,7 +9,7 @@ export function SurroundingsTeaser() {
           <h2 className="section-h">5 minuten op de fiets en je staat met je voeten in het water</h2>
           <ul className="omg-list">
             <li>
-              <span className="name">Drontermeer <small>op de fiets</small></span>
+              <span className="name">Drontermeer &amp; strand <small>zwemmen en suppen</small></span>
               <span className="dots"></span>
               <span className="dist">2 km</span>
             </li>
