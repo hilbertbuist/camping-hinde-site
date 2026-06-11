@@ -55,7 +55,7 @@ export function SurroundingsTeaser() {
               Stobbenweg 6 Dronten met Veluwemeer, Elburg en bossen zichtbaar */}
           <iframe
             title="Kaart van De Hinde en omgeving"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=5.72%2C52.46%2C5.96%2C52.58&amp;layer=mapnik"
+            src="https://maps.google.com/maps?ll=52.5185,5.8397&amp;z=12&amp;output=embed"
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             style={{
@@ -82,7 +82,7 @@ export function SurroundingsTeaser() {
           </div>
           {/* Link naar grote kaart voor wie meer wil zien */}
           <a
-            href="https://www.openstreetmap.org/?mlat=52.5185&amp;mlon=5.8397#map=13/52.5185/5.8397"
+            href="https://www.google.com/maps/dir/?api=1&amp;destination=Stobbenweg+6+Dronten"
             target="_blank"
             rel="noopener noreferrer"
             style={{
@@ -100,7 +100,7 @@ export function SurroundingsTeaser() {
               zIndex: 4,
             }}
           >
-            Open in kaart →
+            Route plannen →
           </a>
         </div>
       </div>
