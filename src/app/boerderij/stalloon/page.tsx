@@ -380,7 +380,7 @@ export default function StalloonPage() {
                 }}
               >
                 Niet roken, geen huisdieren, schoon opleveren. Algemene
-                voorwaarden Vekabo van toepassing.
+                voorwaarden In het Groen van toepassing.
               </p>
             </div>
           </div>

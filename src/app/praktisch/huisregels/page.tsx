@@ -204,7 +204,7 @@ export default function HuisregelsPage() {
             <h2 className="section-h mt-4">Voor de zekerheid</h2>
             <p className="mt-6 text-base leading-relaxed text-tekst-grijs">
               Bij al onze reserveringen zijn de algemene voorwaarden, inclusief
-              annuleringsvoorwaarden, van Vekabo Toeristische Plaatsen van
+              annuleringsvoorwaarden, van In het Groen van
               toepassing.
             </p>
           </div>

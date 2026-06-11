@@ -50,8 +50,26 @@ export function Footer() {
               houten hutten. Drie generaties boerenleven.
             </p>
             <div className="partners">
-              <span className="partner-tag">Vekabo</span>
-              <span className="partner-tag">In het Groen</span>
+              <a
+                href="https://www.inhetgroen.nl"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="In het Groen — onze vakorganisatie"
+                style={{
+                  display: "inline-block",
+                  background: "white",
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                }}
+              >
+                <Image
+                  src="/in-het-groen-logo.png"
+                  alt="In het Groen"
+                  width={120}
+                  height={50}
+                  style={{ display: "block", height: 40, width: "auto" }}
+                />
+              </a>
             </div>
           </div>
 

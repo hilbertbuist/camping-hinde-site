@@ -226,36 +226,39 @@ export default function BoerderijPage() {
               flexWrap: "wrap",
             }}
           >
-            <span
-              className="partner-tag"
+            <a
+              href="https://www.inhetgroen.nl"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{
-                color: "var(--paars)",
-                borderColor: "rgba(94,75,138,.25)",
                 background: "white",
+                padding: "10px 16px",
+                borderRadius: 10,
+                display: "inline-block",
+                boxShadow: "0 4px 12px rgba(0,0,0,.06)",
               }}
+              aria-label="In het Groen — onze vakorganisatie"
             >
-              Vekabo
-            </span>
-            <span
+              <img
+                src="/in-het-groen-logo.png"
+                alt="In het Groen"
+                style={{ display: "block", height: 40, width: "auto" }}
+              />
+            </a>
+            <a
+              href="https://www.vodatent.com"
+              target="_blank"
+              rel="noopener noreferrer"
               className="partner-tag"
               style={{
                 color: "var(--paars)",
                 borderColor: "rgba(94,75,138,.25)",
                 background: "white",
-              }}
-            >
-              In het Groen
-            </span>
-            <span
-              className="partner-tag"
-              style={{
-                color: "var(--paars)",
-                borderColor: "rgba(94,75,138,.25)",
-                background: "white",
+                textDecoration: "none",
               }}
             >
               Vodatent
-            </span>
+            </a>
           </div>
         </div>
       </section>

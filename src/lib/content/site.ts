@@ -32,8 +32,11 @@ export const site = {
   },
 
   memberships: [
-    { name: "Vekabo", url: "https://www.vekabo.nl" },
-    { name: "In het Groen", url: "https://www.inhetgroen.nl" },
+    {
+      name: "In het Groen",
+      url: "https://www.inhetgroen.nl",
+      logo: "/in-het-groen-logo.png",
+    },
   ],
 
   openingsperiode: "april t/m oktober",

@@ -114,7 +114,7 @@ export const accommodations: Accommodation[] = [
       "Geen huisdieren",
       "Linnenpakket verplicht",
       "Aankomst vanaf 15:00, vertrek voor 12:00",
-      "Algemene voorwaarden Vekabo van toepassing",
+      "Algemene voorwaarden In het Groen van toepassing",
     ],
     sfeer:
       "Onze populairste accommodatie. In juli en augustus al maanden van tevoren volgeboekt, dus tijdig reserveren is verstandig.",

@@ -27,7 +27,7 @@ export const faqs: FaqItem[] = [
     category: "Boeken & verblijf",
     question: "Kan ik annuleren?",
     answer:
-      "Ja, volgens de algemene voorwaarden van Vekabo Toeristische Plaatsen. Hoe vroeger je annuleert, hoe lager de kosten.",
+      "Ja, volgens de algemene voorwaarden van In het Groen. Hoe vroeger je annuleert, hoe lager de kosten.",
   },
   {
     category: "Boeken & verblijf",

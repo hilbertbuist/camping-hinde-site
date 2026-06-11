@@ -268,7 +268,7 @@ export default function KamperenPage() {
                 <CheckList
                   items={[
                     "1 hond per plek (aangelijnd, geen overlast)",
-                    "Algemene voorwaarden Vekabo Toeristische Plaatsen van toepassing",
+                    "Algemene voorwaarden In het Groen van toepassing",
                   ]}
                 />
               </div>
