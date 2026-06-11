@@ -2,6 +2,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
+import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 
@@ -41,11 +42,17 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, "src/payload-types.ts"),
   },
-  db: sqliteAdapter({
-    client: {
-      url: process.env.DATABASE_URI || "file:./payload.db",
-    },
-  }),
+  // In productie (Vercel) gebruiken we Vercel Postgres (POSTGRES_URL auto-injected).
+  // Lokaal valt het terug op SQLite voor snel ontwikkelen zonder DB-setup.
+  db: process.env.POSTGRES_URL
+    ? vercelPostgresAdapter({
+        pool: { connectionString: process.env.POSTGRES_URL },
+      })
+    : sqliteAdapter({
+        client: {
+          url: process.env.DATABASE_URI || "file:./payload.db",
+        },
+      }),
   sharp,
   upload: {
     limits: {

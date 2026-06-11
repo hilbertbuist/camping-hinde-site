@@ -3,8 +3,7 @@
 import { FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
-const HERO_IMAGE =
-  "https://campingdehinde.nl/WP/wp-content/uploads/2017/11/Naamloos_panorama1.jpg";
+const HERO_IMAGE = "/images/photos/kampeerveld-camping-de-hinde.jpg";
 
 export function Hero() {
   const router = useRouter();
