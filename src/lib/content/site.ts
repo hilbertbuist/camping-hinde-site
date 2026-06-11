@@ -40,8 +40,8 @@ export const site = {
   stalloonNote: "Stalloon (recreatieruimte) is het hele jaar door beschikbaar voor groepen",
 
   geo: {
-    lat: 52.5286,
-    lng: 5.6603,
+    lat: 52.5185,
+    lng: 5.8397,
   },
 
   kvk: "65548221",
