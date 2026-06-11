@@ -69,11 +69,18 @@ export function Footer() {
                 style={{ display: "inline-block" }}
               >
                 <Image
-                  src="/in-het-groen-wit.png"
+                  src="/in-het-groen-geel.png"
                   alt="In het Groen"
                   width={180}
                   height={60}
-                  style={{ display: "block", height: 44, width: "auto" }}
+                  style={{
+                    display: "block",
+                    height: 48,
+                    width: "auto",
+                    background: "transparent",
+                    padding: 0,
+                    borderRadius: 0,
+                  }}
                 />
               </a>
             </div>
