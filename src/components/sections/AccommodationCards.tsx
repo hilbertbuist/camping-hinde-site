@@ -29,11 +29,11 @@ export function AccommodationCards() {
                   "url('/images/photos/kampeerplek-gruttoveld-met-tent.jpg')",
               }}
             >
-              <div className="acco-badge">19 plekken</div>
+              <div className="acco-badge">16 + 3 camperplekken</div>
             </div>
             <div className="acco-body">
-              <h3>Kampeerplaats</h3>
-              <p>Voor je eigen tent, vouwwagen, caravan of camper. Ruime grasvelden door groen van elkaar gescheiden, eigen wateraansluiting en 6 ampère stroom op elke plek. Op loopafstand van het sanitair en het speelterrein.</p>
+              <h3>Kampeerplaats &amp; campers</h3>
+              <p>Voor je eigen tent, vouwwagen, caravan of camper. Zestien ruime grasvelden door groen van elkaar gescheiden, plus drie verharde plekken speciaal voor zware campers. Eigen wateraansluiting en 6 ampère stroom op elke plek.</p>
               <div className="acco-foot">
                 <div className="acco-price">vanaf <strong>€24</strong> per nacht</div>
                 <Link href="/kamperen" className="btn-link">Bekijk de plek <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></Link>
