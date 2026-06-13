@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Receipt, AlertCircle } from "lucide-react";
 import type { GuestSession } from "../actions";
 import { fetchOpenTab } from "./load";
-import { payOpenTab } from "@/app/winkel/checkout-actions";
+import { payOpenTab } from "@/app/(frontend)/winkel/checkout-actions";
 
 type OpenOrder = {
   id: string;

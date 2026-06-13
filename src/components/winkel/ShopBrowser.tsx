@@ -16,7 +16,7 @@ import {
   Egg,
   ShoppingBag,
 } from "lucide-react";
-import { createShopOrder, type CreateOrderResult } from "@/app/winkel/checkout-actions";
+import { createShopOrder, type CreateOrderResult } from "@/app/(frontend)/winkel/checkout-actions";
 
 type Category = {
   id: string;
