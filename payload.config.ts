@@ -6,14 +6,14 @@ import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 
-import { Users } from "./src/collections/Users.js";
-import { Media } from "./src/collections/Media.js";
-import { ProductCategories } from "./src/collections/ProductCategories.js";
-import { Products } from "./src/collections/Products.js";
-import { BreadItems } from "./src/collections/BreadItems.js";
-import { Bookings } from "./src/collections/Bookings.js";
-import { Orders } from "./src/collections/Orders.js";
-import * as initMigration from "./src/migrations/20260613_000000_init.js";
+import { Users } from "./src/collections/Users";
+import { Media } from "./src/collections/Media";
+import { ProductCategories } from "./src/collections/ProductCategories";
+import { Products } from "./src/collections/Products";
+import { BreadItems } from "./src/collections/BreadItems";
+import { Bookings } from "./src/collections/Bookings";
+import { Orders } from "./src/collections/Orders";
+import * as initMigration from "./src/migrations/20260613_000000_init";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

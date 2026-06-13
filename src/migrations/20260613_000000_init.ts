@@ -1,5 +1,5 @@
 import type { MigrateUpArgs, MigrateDownArgs } from "@payloadcms/db-vercel-postgres";
-import { statements } from "./20260613_000000_init.statements.js";
+import { statements } from "./20260613_000000_init.statements";
 
 /**
  * Eerste ("initiële") migratie voor de Postgres-database op Vercel.

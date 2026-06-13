@@ -24,18 +24,6 @@ const nextConfig: NextConfig = {
     ],
     formats: ["image/avif", "image/webp"],
   },
-  // Laat webpack ".js" imports ook naar ".ts"-bestanden resolven.
-  // Nodig omdat payload.config.ts ".js"-extensies gebruikt voor de collections
-  // en de init-migratie, terwijl die bestanden in werkelijkheid .ts zijn.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  webpack: (config: any) => {
-    config.resolve = config.resolve ?? {};
-    config.resolve.extensionAlias = {
-      ...(config.resolve.extensionAlias ?? {}),
-      ".js": [".ts", ".tsx", ".js", ".jsx"],
-    };
-    return config;
-  },
 };
 
 export default withPayload(withNextIntl(nextConfig));
