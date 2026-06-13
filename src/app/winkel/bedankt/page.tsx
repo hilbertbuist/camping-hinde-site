@@ -15,7 +15,16 @@ export default function ThankYouPage() {
         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-groen-gras/15">
           <CheckCircle2 className="h-9 w-9 text-groen-donker" aria-hidden />
         </div>
-        <h1 className="mt-5 text-2xl font-bold tracking-tight text-tekst-donker">
+        <h1
+          className="mt-5"
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontWeight: 500,
+            fontSize: "1.65rem",
+            color: "var(--paars)",
+          }}
+        >
           {method === "tab" ? "Op je rekening gezet" : "Bedankt en eet smakelijk"}
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-tekst-grijs">
@@ -30,10 +39,7 @@ export default function ThankYouPage() {
           </p>
         )}
         <div className="mt-8 flex flex-col gap-2">
-          <Link
-            href="/winkel"
-            className="inline-flex items-center justify-center gap-1.5 rounded-pill bg-groen-gras px-6 py-3 text-sm font-semibold text-wit hover:bg-groen-donker"
-          >
+          <Link href="/winkel" className="design-btn btn-groen w-full">
             Naar de winkel
           </Link>
           <Link

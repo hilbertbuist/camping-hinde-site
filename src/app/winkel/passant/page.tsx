@@ -73,7 +73,17 @@ function EmptyShopState() {
   return (
     <div className="flex min-h-screen items-center justify-center px-5 py-10">
       <div className="max-w-md text-center">
-        <h1 className="text-2xl font-bold text-tekst-donker">Winkel wordt klaargezet</h1>
+        <h1
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontWeight: 500,
+            fontSize: "1.6rem",
+            color: "var(--paars)",
+          }}
+        >
+          Winkel wordt klaargezet
+        </h1>
         <p className="mt-3 text-tekst-grijs">
           De producten worden ingeladen. Probeer het later opnieuw of vraag iemand op het erf om assistentie.
         </p>

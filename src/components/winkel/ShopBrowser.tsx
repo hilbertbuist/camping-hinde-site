@@ -157,7 +157,15 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
             <ArrowLeft className="h-4 w-4" aria-hidden />
             Terug
           </a>
-          <h1 className="text-base font-bold tracking-tight text-tekst-donker">
+          <h1
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "1.2rem",
+              color: "var(--paars)",
+            }}
+          >
             Boerderijwinkel
           </h1>
           <button
@@ -183,7 +191,7 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                       onClick={() => setActiveCategoryId(c.id)}
                       className={`inline-flex items-center gap-1.5 rounded-pill px-4 py-2 text-sm font-medium transition ${
                         active
-                          ? "bg-tekst-donker text-wit"
+                          ? "bg-paars-primair text-wit"
                           : "bg-creme text-tekst-donker hover:bg-rand-zacht"
                       }`}
                     >
@@ -222,7 +230,15 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                     />
                   )}
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate font-bold tracking-tight text-tekst-donker">
+                    <h3
+                      className="truncate text-tekst-donker"
+                      style={{
+                        fontFamily: "var(--serif)",
+                        fontStyle: "italic",
+                        fontWeight: 500,
+                        fontSize: "1.05rem",
+                      }}
+                    >
                       {p.name}
                     </h3>
                     {p.description && (
@@ -278,7 +294,15 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-tekst-donker/40 sm:items-center">
           <div className="w-full max-w-md rounded-t-card bg-wit p-6 shadow-2xl sm:rounded-card">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold tracking-tight text-tekst-donker">
+              <h2
+                style={{
+                  fontFamily: "var(--serif)",
+                  fontStyle: "italic",
+                  fontWeight: 500,
+                  fontSize: "1.4rem",
+                  color: "var(--paars)",
+                }}
+              >
                 Mijn mandje
               </h2>
               <button
@@ -363,7 +387,8 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                   <button
                     onClick={() => checkout("mollie")}
                     disabled={!confirmed || pending || cart.length === 0}
-                    className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-groen-gras px-6 py-3.5 text-base font-semibold text-wit transition hover:bg-groen-donker disabled:opacity-50"
+                    className="design-btn btn-groen w-full disabled:opacity-50"
+                    style={{ padding: "0.875rem 1.5rem", fontSize: "1rem" }}
                   >
                     {pending ? (
                       "Bezig..."
@@ -378,7 +403,8 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                     <button
                       onClick={() => checkout("tab")}
                       disabled={!confirmed || pending || cart.length === 0}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-pill border-2 border-paars-primair bg-wit px-6 py-3 text-base font-semibold text-paars-donker transition hover:bg-paars-primair/5 disabled:opacity-50"
+                      className="design-btn btn-outline w-full disabled:opacity-50"
+                      style={{ padding: "0.875rem 1.5rem", fontSize: "1rem" }}
                     >
                       Op rekening zetten
                     </button>

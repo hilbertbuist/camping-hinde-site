@@ -33,7 +33,19 @@ export default function WinkelHomePage() {
 
         {/* Welcome */}
         <div className="mt-8 text-center">
-          <h1 className="text-3xl font-bold leading-tight tracking-tight text-tekst-donker sm:text-4xl">
+          <span className="section-tag" style={{ justifyContent: "center" }}>
+            Fijn dat je er bent
+          </span>
+          <h1
+            className="mt-1 leading-tight text-tekst-donker"
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "clamp(2rem, 8vw, 2.5rem)",
+              color: "var(--paars)",
+            }}
+          >
             Welkom in onze winkel
           </h1>
           <p className="mt-3 text-base leading-relaxed text-tekst-grijs">
@@ -52,7 +64,16 @@ export default function WinkelHomePage() {
                 <Tent className="h-7 w-7" aria-hidden />
               </span>
               <div className="flex-1">
-                <h2 className="text-xl font-bold tracking-tight text-tekst-donker">
+                <h2
+                  className="text-tekst-donker"
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontStyle: "italic",
+                    fontWeight: 500,
+                    fontSize: "1.35rem",
+                    color: "var(--paars)",
+                  }}
+                >
                   Ik logeer hier
                 </h2>
                 <p className="mt-1 text-sm text-tekst-grijs">
@@ -72,7 +93,16 @@ export default function WinkelHomePage() {
                 <ShoppingBag className="h-7 w-7" aria-hidden />
               </span>
               <div className="flex-1">
-                <h2 className="text-xl font-bold tracking-tight text-tekst-donker">
+                <h2
+                  className="text-tekst-donker"
+                  style={{
+                    fontFamily: "var(--serif)",
+                    fontStyle: "italic",
+                    fontWeight: 500,
+                    fontSize: "1.35rem",
+                    color: "var(--paars)",
+                  }}
+                >
                   Ik ben passant
                 </h2>
                 <p className="mt-1 text-sm text-tekst-grijs">

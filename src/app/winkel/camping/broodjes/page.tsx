@@ -137,7 +137,16 @@ export default function BroodjesPage() {
             <ArrowLeft className="h-4 w-4" />
             Terug
           </a>
-          <h1 className="inline-flex items-center gap-1.5 text-base font-bold text-tekst-donker">
+          <h1
+            className="inline-flex items-center gap-1.5"
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "1.15rem",
+              color: "var(--paars)",
+            }}
+          >
             <Croissant className="h-4 w-4 text-oranje-warm" aria-hidden />
             Broodjes morgen
           </h1>
@@ -183,7 +192,15 @@ export default function BroodjesPage() {
                   className="flex items-center gap-4 rounded-card border border-rand-zacht bg-wit p-4 shadow-sm"
                 >
                   <div className="min-w-0 flex-1">
-                    <h3 className="truncate font-bold tracking-tight text-tekst-donker">
+                    <h3
+                      className="truncate text-tekst-donker"
+                      style={{
+                        fontFamily: "var(--serif)",
+                        fontStyle: "italic",
+                        fontWeight: 500,
+                        fontSize: "1.05rem",
+                      }}
+                    >
                       {item.name}
                     </h3>
                     {item.description && (
@@ -258,7 +275,8 @@ export default function BroodjesPage() {
             <button
               onClick={submit}
               disabled={pending}
-              className="mt-4 inline-flex w-full items-center justify-center rounded-pill bg-tekst-donker px-6 py-3.5 text-base font-semibold text-wit transition hover:bg-paars-donker disabled:opacity-60"
+              className="design-btn btn-groen mt-4 w-full disabled:opacity-60"
+              style={{ padding: "0.875rem 1.5rem", fontSize: "1rem" }}
             >
               {pending
                 ? "Bezig..."

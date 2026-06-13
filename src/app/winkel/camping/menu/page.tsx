@@ -48,8 +48,24 @@ export default function CamperMenuPage() {
       <div className="mx-auto max-w-md">
         {/* Greeting card */}
         <div className="rounded-card bg-paars-donker p-6 text-wit shadow-lg">
-          <p className="text-xs uppercase tracking-wider text-wit/70">Hallo,</p>
-          <h1 className="mt-1 text-2xl font-bold">{booking.guestName}</h1>
+          <p
+            className="text-wit/85"
+            style={{ fontFamily: "var(--hand)", fontSize: "1.4rem", color: "var(--oranje)" }}
+          >
+            Hallo,
+          </p>
+          <h1
+            className="mt-0.5"
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "1.75rem",
+              color: "white",
+            }}
+          >
+            {booking.guestName}
+          </h1>
           <p className="mt-2 text-sm text-wit/85">
             {booking.campsiteNumber
               ? `Plek ${booking.campsiteNumber}`
@@ -125,7 +141,17 @@ function MenuLink({
         <Icon className="h-6 w-6" aria-hidden />
       </span>
       <div className="flex-1">
-        <h2 className="font-bold tracking-tight text-tekst-donker">{title}</h2>
+        <h2
+          style={{
+            fontFamily: "var(--serif)",
+            fontStyle: "italic",
+            fontWeight: 500,
+            fontSize: "1.15rem",
+            color: "var(--paars)",
+          }}
+        >
+          {title}
+        </h2>
         <p className="mt-0.5 text-xs text-tekst-grijs">{subtitle}</p>
       </div>
       <ChevronRight className="h-5 w-5 flex-none text-tekst-grijs transition-transform group-hover:translate-x-1" />

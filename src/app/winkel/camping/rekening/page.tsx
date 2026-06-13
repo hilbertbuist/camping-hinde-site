@@ -83,7 +83,16 @@ export default function RekeningPage() {
             <ArrowLeft className="h-4 w-4" />
             Terug
           </a>
-          <h1 className="inline-flex items-center gap-1.5 text-base font-bold text-tekst-donker">
+          <h1
+            className="inline-flex items-center gap-1.5"
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "1.15rem",
+              color: "var(--paars)",
+            }}
+          >
             <Receipt className="h-4 w-4 text-paars-primair" aria-hidden />
             Mijn rekening
           </h1>
@@ -147,7 +156,8 @@ export default function RekeningPage() {
               <button
                 onClick={settle}
                 disabled={pending}
-                className="mt-4 inline-flex w-full items-center justify-center rounded-pill bg-groen-gras px-6 py-3.5 text-base font-semibold text-wit transition hover:bg-groen-donker disabled:opacity-60"
+                className="design-btn btn-groen mt-4 w-full disabled:opacity-60"
+                style={{ padding: "0.875rem 1.5rem", fontSize: "1rem" }}
               >
                 {pending ? "Bezig..." : "Nu afrekenen"}
               </button>

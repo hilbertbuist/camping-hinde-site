@@ -52,7 +52,16 @@ export default function CampingLoginPage() {
           <span className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-groen-gras/15 text-groen-donker">
             <Tent className="h-7 w-7" aria-hidden />
           </span>
-          <h1 className="mt-5 text-3xl font-bold tracking-tight text-tekst-donker">
+          <h1
+            className="mt-5 text-tekst-donker"
+            style={{
+              fontFamily: "var(--serif)",
+              fontStyle: "italic",
+              fontWeight: 500,
+              fontSize: "clamp(1.85rem, 7vw, 2.25rem)",
+              color: "var(--paars)",
+            }}
+          >
             Welkom op De Hinde
           </h1>
           <p className="mt-2 text-sm text-tekst-grijs">
@@ -88,7 +97,8 @@ export default function CampingLoginPage() {
           <button
             type="submit"
             disabled={pending}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-pill bg-groen-gras px-6 py-3.5 text-base font-semibold text-wit transition-colors hover:bg-groen-donker disabled:opacity-60"
+            className="design-btn btn-groen w-full disabled:opacity-60"
+            style={{ padding: "0.875rem 1.5rem", fontSize: "1rem" }}
           >
             {pending ? "Bezig..." : "Inloggen"}
             <ArrowRight className="h-4 w-4" aria-hidden />
