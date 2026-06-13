@@ -105,7 +105,9 @@ export default buildConfig({
   // Vercel Blob (cloud). Lokaal (zonder token) valt het terug op de schijf.
   plugins: [
     vercelBlobStorage({
-      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      // Actief zodra er een Blob-koppeling is: via een read-write token óf via
+      // de OIDC-koppeling (BLOB_STORE_ID). Lokaal (geen van beide) → schijf.
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID),
       collections: { media: true },
       token: process.env.BLOB_READ_WRITE_TOKEN,
     }),
