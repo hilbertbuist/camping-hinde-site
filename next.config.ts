@@ -50,4 +50,18 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withPayload(withNextIntl(nextConfig));
+const finalConfig = withPayload(withNextIntl(nextConfig));
+
+// withPayload zet drizzle-kit in outputFileTracingExcludes['**/*']. Daardoor
+// belandt drizzle-kit niet in de serverless-bundle en faalt onze init-migratie
+// met "Cannot find module 'drizzle-kit/api'". We halen die excludes er weer uit
+// zodat outputFileTracingIncludes (hierboven) drizzle-kit echt mee kan nemen.
+if (finalConfig.outputFileTracingExcludes) {
+  for (const key of Object.keys(finalConfig.outputFileTracingExcludes)) {
+    finalConfig.outputFileTracingExcludes[key] = finalConfig.outputFileTracingExcludes[
+      key
+    ].filter((p: string) => !p.startsWith("drizzle-kit"));
+  }
+}
+
+export default finalConfig;
