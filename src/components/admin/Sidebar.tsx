@@ -11,21 +11,39 @@ import {
   ShoppingBag,
   Tent,
   Image as ImageIcon,
+  Settings,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
 import { logoutAction } from "@/app/(admin)/beheer/login/actions";
 
 type NavItem = { label: string; href: string; icon: LucideIcon };
+type NavGroup = { title?: string; items: NavItem[] };
 
-const NAV: NavItem[] = [
-  { label: "Dashboard", href: "/beheer", icon: LayoutDashboard },
-  { label: "Producten", href: "/beheer/producten", icon: Package },
-  { label: "Categorieën", href: "/beheer/categorieen", icon: FolderTree },
-  { label: "Broodjes", href: "/beheer/broodjes", icon: Croissant },
-  { label: "Bestellingen", href: "/beheer/bestellingen", icon: ShoppingBag },
-  { label: "Boekingen", href: "/beheer/boekingen", icon: Tent },
-  { label: "Media", href: "/beheer/media", icon: ImageIcon },
+const NAV_GROUPS: NavGroup[] = [
+  {
+    items: [{ label: "Dashboard", href: "/beheer", icon: LayoutDashboard }],
+  },
+  {
+    title: "Winkel",
+    items: [
+      { label: "Producten", href: "/beheer/producten", icon: Package },
+      { label: "Categorieën", href: "/beheer/categorieen", icon: FolderTree },
+      { label: "Broodjes", href: "/beheer/broodjes", icon: Croissant },
+      { label: "Bestellingen", href: "/beheer/bestellingen", icon: ShoppingBag },
+    ],
+  },
+  {
+    title: "Camping",
+    items: [{ label: "Boekingen", href: "/beheer/boekingen", icon: Tent }],
+  },
+  {
+    title: "Beheer",
+    items: [
+      { label: "Media", href: "/beheer/media", icon: ImageIcon },
+      { label: "Instellingen", href: "/beheer/instellingen", icon: Settings },
+    ],
+  },
 ];
 
 type SidebarProps = {
@@ -57,21 +75,26 @@ export function Sidebar({ userName, userRole }: SidebarProps) {
       </Link>
 
       <nav className="admin-sidebar__nav">
-        {NAV.map((item) => {
-          const Icon = item.icon;
-          const active = isActive(pathname, item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`admin-nav-item${active ? " admin-nav-item--active" : ""}`}
-              aria-current={active ? "page" : undefined}
-            >
-              <Icon strokeWidth={2} />
-              {item.label}
-            </Link>
-          );
-        })}
+        {NAV_GROUPS.map((group, gi) => (
+          <div key={group.title ?? `g${gi}`} className="admin-nav-group">
+            {group.title && <span className="admin-nav-group__title">{group.title}</span>}
+            {group.items.map((item) => {
+              const Icon = item.icon;
+              const active = isActive(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`admin-nav-item${active ? " admin-nav-item--active" : ""}`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <Icon strokeWidth={2} />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        ))}
       </nav>
 
       <div className="admin-sidebar__footer">

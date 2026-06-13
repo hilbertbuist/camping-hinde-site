@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { listDocs } from "@/lib/admin/data";
 import { AdminButton } from "@/components/admin/ui/AdminButton";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
-import { DataTable } from "@/components/admin/ui/DataTable";
+import { SortableTable, type SortableRow } from "@/components/admin/SortableTable";
 
 export const dynamic = "force-dynamic";
 
@@ -19,6 +19,7 @@ type Product = {
   stock?: number;
   trackStock?: boolean;
   active?: boolean;
+  order?: number;
 };
 
 function imageUrl(image: Product["image"]): string | null {
@@ -33,16 +34,14 @@ function categoryName(category: Product["category"]): string {
 
 export default async function ProductenPage() {
   await requireAdmin();
-  const products = await listDocs<Product>("products", { sort: "name", depth: 1 });
+  const products = await listDocs<Product>("products", { sort: "order", depth: 1 });
 
-  const columns = [
-    {
-      key: "image",
-      label: "",
-      className: "w-12",
-      render: (row: Product) => {
-        const url = imageUrl(row.image);
-        return url ? (
+  const rows: SortableRow[] = products.map((row) => {
+    const url = imageUrl(row.image);
+    return {
+      id: String(row.id),
+      cells: [
+        url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={url}
@@ -61,33 +60,11 @@ export default async function ProductenPage() {
               border: "1px solid var(--a-rand)",
             }}
           />
-        );
-      },
-    },
-    {
-      key: "name",
-      label: "Naam",
-      render: (row: Product) => <span style={{ fontWeight: 600 }}>{row.name ?? "—"}</span>,
-    },
-    {
-      key: "category",
-      label: "Categorie",
-      render: (row: Product) => categoryName(row.category),
-    },
-    {
-      key: "price",
-      label: "Prijs",
-      render: (row: Product) => euro.format(row.price ?? 0),
-    },
-    {
-      key: "stock",
-      label: "Voorraad",
-      render: (row: Product) => (row.trackStock ? String(row.stock ?? 0) : "—"),
-    },
-    {
-      key: "active",
-      label: "Status",
-      render: (row: Product) => (
+        ),
+        <span style={{ fontWeight: 600 }}>{row.name ?? "—"}</span>,
+        <span>{categoryName(row.category)}</span>,
+        <span>{euro.format(row.price ?? 0)}</span>,
+        <span>{row.trackStock ? String(row.stock ?? 0) : "—"}</span>,
         <span
           style={{
             display: "inline-block",
@@ -100,19 +77,15 @@ export default async function ProductenPage() {
           }}
         >
           {row.active ? "Actief" : "Verborgen"}
-        </span>
-      ),
-    },
-    {
-      key: "actions",
-      label: "",
-      render: (row: Product) => (
-        <AdminButton variant="outline" size="sm" href={`/beheer/producten/${row.id}`}>
-          Bewerken
-        </AdminButton>
-      ),
-    },
-  ];
+        </span>,
+        <span style={{ display: "flex", justifyContent: "flex-end" }}>
+          <AdminButton variant="outline" size="sm" href={`/beheer/producten/${row.id}`}>
+            Bewerken
+          </AdminButton>
+        </span>,
+      ],
+    };
+  });
 
   return (
     <div>
@@ -125,9 +98,11 @@ export default async function ProductenPage() {
           </AdminButton>
         }
       />
-      <DataTable
-        columns={columns}
-        rows={products}
+      <SortableTable
+        collection="products"
+        template="48px 1.6fr 1fr 110px 90px 100px 110px"
+        headers={["", "Naam", "Categorie", "Prijs", "Voorraad", "Status", ""]}
+        rows={rows}
         emptyText="Nog geen producten. Voeg je eerste product toe."
       />
     </div>

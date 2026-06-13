@@ -99,5 +99,15 @@ export const Products: CollectionConfig = {
         description: "Bijv. 'Slagerij Berg, Dronten' — wordt opgenomen in productdetails als herkomst.",
       },
     },
+    {
+      name: "order",
+      type: "number",
+      label: "Volgorde",
+      defaultValue: 0,
+      admin: {
+        description: "Bepaald via slepen in de productenlijst.",
+        hidden: true,
+      },
+    },
   ],
 };

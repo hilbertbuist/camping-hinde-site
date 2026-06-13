@@ -14,6 +14,7 @@ import { BreadItems } from "./src/collections/BreadItems";
 import { Bookings } from "./src/collections/Bookings";
 import { Orders } from "./src/collections/Orders";
 import * as initMigration from "./src/migrations/20260613_000000_init";
+import * as productsOrderMigration from "./src/migrations/20260613_000001_products_order";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -65,6 +66,11 @@ export default buildConfig({
             name: "20260613_000000_init",
             up: initMigration.up,
             down: initMigration.down,
+          },
+          {
+            name: "20260613_000001_products_order",
+            up: productsOrderMigration.up,
+            down: productsOrderMigration.down,
           },
         ],
       })

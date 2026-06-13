@@ -3,7 +3,7 @@ import { requireAdmin } from "@/lib/admin/auth";
 import { listDocs } from "@/lib/admin/data";
 import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { AdminButton } from "@/components/admin/ui/AdminButton";
-import { DataTable } from "@/components/admin/ui/DataTable";
+import { SortableTable, type SortableRow } from "@/components/admin/SortableTable";
 
 type Media = { id: string; url?: string; alt?: string };
 type BreadItem = {
@@ -13,6 +13,7 @@ type BreadItem = {
   price: number;
   active?: boolean;
   image?: Media | string | null;
+  order?: number;
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -47,15 +48,13 @@ export default async function BroodjesPage() {
   await requireAdmin();
   const items = await listDocs<BreadItem>("bread-items", { sort: "order", depth: 1 });
 
-  const columns = [
-    {
-      key: "image",
-      label: "",
-      className: "a-col-thumb",
-      render: (row: BreadItem) => {
-        const media = typeof row.image === "object" && row.image ? row.image : null;
-        const url = media?.url;
-        return url ? (
+  const rows: SortableRow[] = items.map((row) => {
+    const media = typeof row.image === "object" && row.image ? row.image : null;
+    const url = media?.url;
+    return {
+      id: String(row.id),
+      cells: [
+        url ? (
           <Image
             src={url}
             alt={media?.alt ?? row.name}
@@ -78,41 +77,23 @@ export default async function BroodjesPage() {
           >
             🥪
           </div>
-        );
-      },
-    },
-    { key: "name", label: "Naam", render: (row: BreadItem) => <strong>{row.name}</strong> },
-    {
-      key: "category",
-      label: "Type",
-      render: (row: BreadItem) => CATEGORY_LABELS[row.category] ?? row.category,
-    },
-    {
-      key: "price",
-      label: "Prijs",
-      render: (row: BreadItem) => eur.format(row.price ?? 0),
-    },
-    {
-      key: "active",
-      label: "Status",
-      render: (row: BreadItem) =>
+        ),
+        <strong>{row.name}</strong>,
+        <span>{CATEGORY_LABELS[row.category] ?? row.category}</span>,
+        <span>{eur.format(row.price ?? 0)}</span>,
         row.active ? (
           <Pill color="var(--a-groen)">Beschikbaar</Pill>
         ) : (
           <Pill color="var(--a-grijs)">Verborgen</Pill>
         ),
-    },
-    {
-      key: "actions",
-      label: "",
-      className: "a-col-actions",
-      render: (row: BreadItem) => (
-        <AdminButton href={`/beheer/broodjes/${row.id}`} variant="outline" size="sm">
-          Bewerken
-        </AdminButton>
-      ),
-    },
-  ];
+        <span style={{ display: "flex", justifyContent: "flex-end" }}>
+          <AdminButton href={`/beheer/broodjes/${row.id}`} variant="outline" size="sm">
+            Bewerken
+          </AdminButton>
+        </span>,
+      ],
+    };
+  });
 
   return (
     <>
@@ -125,9 +106,11 @@ export default async function BroodjesPage() {
           </AdminButton>
         }
       />
-      <DataTable
-        columns={columns}
-        rows={items}
+      <SortableTable
+        collection="bread-items"
+        template="56px 1.6fr 1fr 110px 130px 110px"
+        headers={["", "Naam", "Type", "Prijs", "Status", ""]}
+        rows={rows}
         emptyText="Nog geen broodjes in het menu. Voeg het eerste broodje toe!"
       />
     </>

@@ -111,6 +111,23 @@ body {
   overflow-y: auto;
 }
 
+.admin-nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.admin-nav-group + .admin-nav-group {
+  margin-top: 14px;
+}
+.admin-nav-group__title {
+  padding: 4px 12px;
+  font-family: var(--a-font-hand);
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  color: var(--a-oranje);
+  opacity: 0.9;
+}
+
 .admin-nav-item {
   display: flex;
   align-items: center;
@@ -556,4 +573,98 @@ textarea.a-input {
 .a-login__submit {
   width: 100%;
   margin-top: 6px;
+}
+
+/* ---- sorteerbare lijst (drag-and-drop volgorde) ------------------------ */
+.a-sort__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  min-height: 20px;
+}
+.a-sort__hint {
+  font-size: 13px;
+  color: var(--a-grijs);
+}
+.a-sort__saving {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--a-groen-donker);
+}
+.a-sort__error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--a-danger);
+}
+.a-sort__head {
+  display: grid;
+  align-items: center;
+  gap: 14px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--a-grijs);
+}
+.a-sort__list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.a-sort__row {
+  display: grid;
+  align-items: center;
+  gap: 14px;
+  background: var(--a-wit);
+  border: 1px solid var(--a-rand);
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: var(--a-shadow-card);
+}
+.a-sort__row--drag {
+  position: relative;
+  z-index: 5;
+  box-shadow: 0 10px 24px rgba(31, 36, 33, 0.16);
+  border-color: var(--a-groen);
+}
+.a-sort__handle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin: -4px 0 -4px -4px;
+  border: none;
+  background: transparent;
+  color: var(--a-grijs);
+  border-radius: 8px;
+  cursor: grab;
+  touch-action: none;
+}
+.a-sort__handle:hover {
+  background: var(--a-creme);
+  color: var(--a-paars);
+}
+.a-sort__handle:active {
+  cursor: grabbing;
+}
+.a-sort__cell {
+  min-width: 0;
+  font-size: 14px;
+  color: var(--a-tekst);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.a-sort__empty {
+  background: var(--a-wit);
+  border: 1px solid var(--a-rand);
+  border-radius: 12px;
+  padding: 28px;
+  text-align: center;
+  color: var(--a-grijs);
 }
