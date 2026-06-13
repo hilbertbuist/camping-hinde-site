@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, relId, type SaveResult } from "@/lib/admin/data";
 
 function parseProduct(formData: FormData) {
   const trackStock = formData.get("trackStock") === "on" || formData.get("trackStock") === "true";
@@ -13,8 +13,8 @@ function parseProduct(formData: FormData) {
   const stockRaw = (formData.get("stock") as string | null) ?? "";
   const stock = stockRaw === "" ? 0 : Number(stockRaw);
 
-  const category = (formData.get("category") as string | null) || null;
-  const image = (formData.get("image") as string | null) || null;
+  const category = relId(formData.get("category"));
+  const image = relId(formData.get("image"));
   const supplier = ((formData.get("supplier") as string | null) || "").trim();
   const description = ((formData.get("description") as string | null) || "").trim();
 

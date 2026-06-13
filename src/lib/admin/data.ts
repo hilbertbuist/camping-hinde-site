@@ -81,6 +81,19 @@ export function friendlyError(err: unknown): string {
   return "Opslaan mislukt. Controleer de velden en probeer het opnieuw.";
 }
 
+/**
+ * Koppeling-/upload-velden (relationship/upload) komen uit een formulier als
+ * tekst ("1"). Payload verwacht voor numerieke id's (Postgres/SQLite) een getal;
+ * een string faalt op validatie ("Controleer deze velden: …"). Deze helper zet
+ * numerieke id's om naar een getal, en laat niet-numerieke id's (bv. Mongo) intact.
+ */
+export function relId(value: FormDataEntryValue | null): number | string | null {
+  const s = (typeof value === "string" ? value : "").trim();
+  if (!s) return null;
+  const n = Number(s);
+  return Number.isInteger(n) ? n : s;
+}
+
 export async function createDoc(collection: string, data: any): Promise<{ id: string }> {
   const p = await payload();
   const doc = await p.create({ collection: collection as any, data });

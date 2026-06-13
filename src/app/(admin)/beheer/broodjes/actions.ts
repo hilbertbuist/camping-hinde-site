@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, relId, type SaveResult } from "@/lib/admin/data";
 
 const CATEGORIES = ["broodje-zacht", "broodje-hard", "croissant", "eieren", "anders"];
 
@@ -18,7 +18,7 @@ function parseBread(formData: FormData) {
   const category = CATEGORIES.includes(categoryRaw) ? categoryRaw : "broodje-zacht";
 
   const description = ((formData.get("description") as string | null) || "").trim();
-  const image = (formData.get("image") as string | null) || null;
+  const image = relId(formData.get("image"));
 
   return {
     name: ((formData.get("name") as string | null) || "").trim(),

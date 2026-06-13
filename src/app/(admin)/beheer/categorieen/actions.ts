@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, relId, type SaveResult } from "@/lib/admin/data";
 
 function parseCategory(formData: FormData) {
   const active = formData.get("active") === "on" || formData.get("active") === "true";
@@ -9,7 +9,7 @@ function parseCategory(formData: FormData) {
   const orderRaw = (formData.get("order") as string | null) ?? "";
   const order = orderRaw === "" ? 100 : Number(orderRaw);
 
-  const image = (formData.get("image") as string | null) || null;
+  const image = relId(formData.get("image"));
   const description = ((formData.get("description") as string | null) || "").trim();
 
   return {
