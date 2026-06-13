@@ -1,34 +1,38 @@
 import type { MigrateUpArgs, MigrateDownArgs } from "@payloadcms/db-vercel-postgres";
-import { pushDevSchema } from "@payloadcms/drizzle";
+import { statements } from "./20260613_000000_init.statements.js";
 
 /**
  * Eerste ("initiële") migratie voor de Postgres-database op Vercel.
  *
- * Waarom geen handgeschreven SQL?
- * Payload's `migrate:create` CLI kan op Windows én op Vercel de collection-imports
- * in payload.config.ts niet resolven (tsx `tsImport` bug → ERR_MODULE_NOT_FOUND),
- * waardoor het genereren van een klassieke SQL-migratie niet lukt. De Next.js/webpack
- * build resolvet diezelfde config wél prima.
+ * Waarom kant-en-klare SQL i.p.v. een drizzle schema-push?
+ * - Payload's `migrate:create` CLI kan op Windows én op Vercel de collection-imports
+ *   in payload.config.ts niet resolven (tsx `tsImport` bug → ERR_MODULE_NOT_FOUND),
+ *   dus de normale migratie-generatie lukt daar niet.
+ * - Een runtime drizzle-push (pushDevSchema → require('drizzle-kit/api')) faalt op
+ *   Vercel omdat withPayload drizzle-kit uit de serverless-bundle weert en het pakket
+ *   zwaar/native (esbuild) is.
  *
- * Daarom draaien we hier dezelfde schema-push die Payload normaal in dev gebruikt
- * (`pushDevSchema`), maar nu expliciet in productie. Drizzle leidt het volledige
- * schema af uit de (webpack-gebundelde) collections en maakt in één keer alle
- * tabellen aan op de lege Neon-database — inclusief de `payload_migrations`-tabel,
- * die `prodMigrations` daarna nodig heeft om deze migratie als 'uitgevoerd' te boeken.
+ * Daarom is het volledige Postgres-schema één keer lokaal gegenereerd met
+ * drizzle-kit (generateMigration over de webpack-resolvebare config) en hier als
+ * platte SQL-statements opgeslagen (zie ./20260613_000000_init.statements.ts).
+ * Deze migratie voert die statements simpelweg uit — geen extra runtime-deps nodig.
  *
- * Deze migratie wordt automatisch uitgevoerd bij de eerste connect in productie,
- * via `prodMigrations` in de db-adapter (zie payload.config.ts). Drizzle's push is
- * idempotent: bij een volgende deploy is het schema al gelijk en gebeurt er niets.
+ * Uitvoering gebeurt automatisch bij de eerste connect in productie via
+ * `prodMigrations` in de db-adapter (zie payload.config.ts en
+ * node_modules/@payloadcms/db-vercel-postgres/dist/connect.js). De migratie maakt
+ * álle tabellen aan, inclusief `payload_migrations`, die Payload daarna gebruikt om
+ * deze migratie als 'uitgevoerd' te boeken. Bij volgende deploys staat de migratie
+ * al geboekt en gebeurt er niets meer.
  */
-export async function up({ payload }: MigrateUpArgs): Promise<void> {
-  // Forceer de push ook al staat NODE_ENV op production en sla de
-  // interactieve "accept warnings"-prompt over (lege DB → geen dataverlies).
-  process.env.PAYLOAD_FORCE_DRIZZLE_PUSH = "true";
-
-  // payload.db is de drizzle-adapter; pushDevSchema leidt het schema uit
-  // adapter.schema/rawTables af en synct het naar de live database.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await pushDevSchema(payload.db as any);
+export async function up({ db, payload }: MigrateUpArgs): Promise<void> {
+  for (const statement of statements) {
+    const trimmed = statement.trim();
+    if (!trimmed) {
+      continue;
+    }
+    // payload.db.execute draait het statement op de actieve (transactie-)verbinding.
+    await payload.db.execute({ db, raw: trimmed });
+  }
 }
 
 export async function down(_args: MigrateDownArgs): Promise<void> {

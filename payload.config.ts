@@ -52,7 +52,9 @@ export default buildConfig({
   // collection-imports niet kan resolven. Daarom gebruiken we `prodMigrations`:
   // de db-adapter draait bij de eerste connect in productie automatisch deze
   // migratie (zie node_modules/@payloadcms/db-vercel-postgres/dist/connect.js).
-  // De migratie doet zelf een drizzle schema-push en maakt zo alle tabellen aan.
+  // De migratie voert kant-en-klare Postgres-DDL uit (één keer lokaal gegenereerd
+  // met drizzle-kit) en maakt zo alle tabellen aan — zonder runtime-afhankelijkheid
+  // van drizzle-kit/esbuild.
   db: process.env.POSTGRES_URL
     ? vercelPostgresAdapter({
         pool: { connectionString: process.env.POSTGRES_URL },
