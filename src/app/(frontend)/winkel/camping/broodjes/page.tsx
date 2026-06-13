@@ -29,7 +29,7 @@ export default function BroodjesPage() {
   const [booking, setBooking] = useState<GuestSession | null>(null);
   const [items, setItems] = useState<BreadItem[]>([]);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
-  const [paymentMethod, setPaymentMethod] = useState<"mollie" | "tab">("tab");
+  const [paymentMethod, setPaymentMethod] = useState<"mollie" | "tab">("mollie");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -40,7 +40,10 @@ export default function BroodjesPage() {
       return;
     }
     try {
-      setBooking(JSON.parse(raw) as GuestSession);
+      const parsed = JSON.parse(raw) as GuestSession;
+      setBooking(parsed);
+      // "Op rekening" alleen voorselecteren als er een echte boeking gekoppeld is.
+      if (parsed.linked && parsed.bookingId) setPaymentMethod("tab");
     } catch {
       router.replace("/winkel/camping");
     }
@@ -245,28 +248,34 @@ export default function BroodjesPage() {
               <span className="text-xl font-bold">€{total.toFixed(2)}</span>
             </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-2 rounded-pill bg-rand-zacht p-1">
-              <button
-                onClick={() => setPaymentMethod("tab")}
-                className={`rounded-pill py-2.5 text-sm font-medium transition ${
-                  paymentMethod === "tab"
-                    ? "bg-paars-primair text-wit shadow"
-                    : "text-tekst-grijs"
-                }`}
-              >
-                Op rekening
-              </button>
-              <button
-                onClick={() => setPaymentMethod("mollie")}
-                className={`rounded-pill py-2.5 text-sm font-medium transition ${
-                  paymentMethod === "mollie"
-                    ? "bg-groen-gras text-wit shadow"
-                    : "text-tekst-grijs"
-                }`}
-              >
-                Direct betalen
-              </button>
-            </div>
+            {booking?.linked && booking?.bookingId ? (
+              <div className="mt-4 grid grid-cols-2 gap-2 rounded-pill bg-rand-zacht p-1">
+                <button
+                  onClick={() => setPaymentMethod("tab")}
+                  className={`rounded-pill py-2.5 text-sm font-medium transition ${
+                    paymentMethod === "tab"
+                      ? "bg-paars-primair text-wit shadow"
+                      : "text-tekst-grijs"
+                  }`}
+                >
+                  Op rekening
+                </button>
+                <button
+                  onClick={() => setPaymentMethod("mollie")}
+                  className={`rounded-pill py-2.5 text-sm font-medium transition ${
+                    paymentMethod === "mollie"
+                      ? "bg-groen-gras text-wit shadow"
+                      : "text-tekst-grijs"
+                  }`}
+                >
+                  Direct betalen
+                </button>
+              </div>
+            ) : (
+              <p className="mt-4 text-xs text-tekst-grijs">
+                Je rekent direct af. Op rekening zetten kan zodra je verblijf bij de receptie is gekoppeld.
+              </p>
+            )}
 
             {error && (
               <p className="mt-3 text-sm text-red-700">{error}</p>

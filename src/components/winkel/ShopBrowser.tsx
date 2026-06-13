@@ -50,6 +50,7 @@ type GuestSession = {
   reference: string;
   guestName: string;
   campsiteNumber?: string;
+  linked?: boolean;
 };
 
 type Props = {
@@ -399,7 +400,7 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                       </>
                     )}
                   </button>
-                  {mode === "camper" && (
+                  {mode === "camper" && booking?.linked && booking?.bookingId && (
                     <button
                       onClick={() => checkout("tab")}
                       disabled={!confirmed || pending || cart.length === 0}
