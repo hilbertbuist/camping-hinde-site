@@ -1,0 +1,94 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import {
+  LayoutDashboard,
+  Package,
+  FolderTree,
+  Croissant,
+  ShoppingBag,
+  Tent,
+  Image as ImageIcon,
+  LogOut,
+  type LucideIcon,
+} from "lucide-react";
+import { logoutAction } from "@/app/(admin)/beheer/login/actions";
+
+type NavItem = { label: string; href: string; icon: LucideIcon };
+
+const NAV: NavItem[] = [
+  { label: "Dashboard", href: "/beheer", icon: LayoutDashboard },
+  { label: "Producten", href: "/beheer/producten", icon: Package },
+  { label: "Categorieën", href: "/beheer/categorieen", icon: FolderTree },
+  { label: "Broodjes", href: "/beheer/broodjes", icon: Croissant },
+  { label: "Bestellingen", href: "/beheer/bestellingen", icon: ShoppingBag },
+  { label: "Boekingen", href: "/beheer/boekingen", icon: Tent },
+  { label: "Media", href: "/beheer/media", icon: ImageIcon },
+];
+
+type SidebarProps = {
+  userName?: string;
+  userRole?: string;
+};
+
+function isActive(pathname: string, href: string): boolean {
+  if (href === "/beheer") return pathname === "/beheer";
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+export function Sidebar({ userName, userRole }: SidebarProps) {
+  const pathname = usePathname() ?? "";
+  const initial = (userName ?? "?").trim().charAt(0).toUpperCase() || "?";
+
+  return (
+    <aside className="admin-sidebar">
+      <Link href="/beheer" className="admin-sidebar__brand">
+        <Image src="/logo.png" alt="De Hinde" width={40} height={40} />
+        <span className="admin-sidebar__brand-text">
+          <span className="admin-sidebar__brand-name">De Hinde</span>
+          <span className="admin-sidebar__brand-sub">beheer</span>
+        </span>
+      </Link>
+
+      <nav className="admin-sidebar__nav">
+        {NAV.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(pathname, item.href);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`admin-nav-item${active ? " admin-nav-item--active" : ""}`}
+              aria-current={active ? "page" : undefined}
+            >
+              <Icon strokeWidth={2} />
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className="admin-sidebar__footer">
+        <div className="admin-sidebar__user">
+          <span className="admin-sidebar__avatar">{initial}</span>
+          <span className="admin-sidebar__user-text">
+            <span className="admin-sidebar__user-name">{userName ?? "Beheerder"}</span>
+            <span className="admin-sidebar__user-role">
+              {userRole === "staff" ? "Personeel" : "Beheerder"}
+            </span>
+          </span>
+        </div>
+        <form action={logoutAction}>
+          <button type="submit" className="admin-logout">
+            <LogOut strokeWidth={2} />
+            Uitloggen
+          </button>
+        </form>
+      </div>
+    </aside>
+  );
+}
+
+export default Sidebar;
