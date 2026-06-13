@@ -13,7 +13,8 @@
  */
 
 import { getPayload } from "payload";
-import config from "../payload.config";
+// Expliciete .ts extensie: de payload-tsx runner vereist die voor losse scripts.
+import config from "../payload.config.ts";
 
 const run = async () => {
   try {
