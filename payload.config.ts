@@ -6,13 +6,14 @@ import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import sharp from "sharp";
 
-import { Users } from "./src/collections/Users";
-import { Media } from "./src/collections/Media";
-import { ProductCategories } from "./src/collections/ProductCategories";
-import { Products } from "./src/collections/Products";
-import { BreadItems } from "./src/collections/BreadItems";
-import { Bookings } from "./src/collections/Bookings";
-import { Orders } from "./src/collections/Orders";
+import { Users } from "./src/collections/Users.js";
+import { Media } from "./src/collections/Media.js";
+import { ProductCategories } from "./src/collections/ProductCategories.js";
+import { Products } from "./src/collections/Products.js";
+import { BreadItems } from "./src/collections/BreadItems.js";
+import { Bookings } from "./src/collections/Bookings.js";
+import { Orders } from "./src/collections/Orders.js";
+import * as initMigration from "./src/migrations/20260613_000000_init.js";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -44,12 +45,26 @@ export default buildConfig({
   },
   // In productie (Vercel) gebruiken we Vercel Postgres (POSTGRES_URL auto-injected).
   // Lokaal valt het terug op SQLite voor snel ontwikkelen zonder DB-setup.
-  // `push: true` zorgt dat Payload bij eerste deploy automatisch alle tabellen
-  // aanmaakt op basis van de collections — geen losse migratie nodig.
+  //
+  // Schema-aanmaak op Vercel:
+  // Payload's `push` draait alleen als NODE_ENV !== production, dus nooit tijdens
+  // een Vercel-build/-runtime. En `payload migrate` via de CLI faalt omdat tsx de
+  // collection-imports niet kan resolven. Daarom gebruiken we `prodMigrations`:
+  // de db-adapter draait bij de eerste connect in productie automatisch deze
+  // migratie (zie node_modules/@payloadcms/db-vercel-postgres/dist/connect.js).
+  // De migratie doet zelf een drizzle schema-push en maakt zo alle tabellen aan.
   db: process.env.POSTGRES_URL
     ? vercelPostgresAdapter({
         pool: { connectionString: process.env.POSTGRES_URL },
-        push: true,
+        // push staat in productie toch uit; tabellen komen via prodMigrations.
+        push: false,
+        prodMigrations: [
+          {
+            name: "20260613_000000_init",
+            up: initMigration.up,
+            down: initMigration.down,
+          },
+        ],
       })
     : sqliteAdapter({
         client: {
