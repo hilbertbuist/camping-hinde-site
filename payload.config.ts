@@ -4,6 +4,7 @@ import { buildConfig } from "payload";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
 import { vercelPostgresAdapter } from "@payloadcms/db-vercel-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { vercelBlobStorage } from "@payloadcms/storage-vercel-blob";
 import sharp from "sharp";
 
 import { Users } from "./src/collections/Users";
@@ -100,4 +101,13 @@ export default buildConfig({
       fileSize: 10000000, // 10 MB
     },
   },
+  // Media-opslag: op Vercel is de schijf alleen-lezen, dus foto's gaan naar
+  // Vercel Blob (cloud). Lokaal (zonder token) valt het terug op de schijf.
+  plugins: [
+    vercelBlobStorage({
+      enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+  ],
 });
