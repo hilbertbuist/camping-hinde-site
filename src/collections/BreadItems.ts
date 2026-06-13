@@ -44,7 +44,7 @@ export const BreadItems: CollectionConfig = {
       type: "select",
       label: "Type",
       required: true,
-      defaultValue: "broodje",
+      defaultValue: "broodje-zacht",
       options: [
         { label: "Broodje (zacht)", value: "broodje-zacht" },
         { label: "Broodje (hard)", value: "broodje-hard" },
