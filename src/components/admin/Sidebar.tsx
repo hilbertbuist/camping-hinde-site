@@ -45,11 +45,15 @@ export function Sidebar({ userName, userRole }: SidebarProps) {
   return (
     <aside className="admin-sidebar">
       <Link href="/beheer" className="admin-sidebar__brand">
-        <Image src="/logo.png" alt="De Hinde" width={40} height={40} />
-        <span className="admin-sidebar__brand-text">
-          <span className="admin-sidebar__brand-name">De Hinde</span>
-          <span className="admin-sidebar__brand-sub">beheer</span>
-        </span>
+        <Image
+          src="/logo.png"
+          alt="Boerderijcamping De Hinde"
+          width={1181}
+          height={721}
+          className="admin-sidebar__logo"
+          priority
+        />
+        <span className="admin-sidebar__brand-sub">beheer</span>
       </Link>
 
       <nav className="admin-sidebar__nav">

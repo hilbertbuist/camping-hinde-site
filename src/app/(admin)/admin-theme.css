@@ -81,37 +81,26 @@ body {
 
 .admin-sidebar__brand {
   display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 10px 22px;
-}
-
-.admin-sidebar__brand img {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  object-fit: cover;
-  background: #fff;
-}
-
-.admin-sidebar__brand-text {
-  display: flex;
   flex-direction: column;
-  line-height: 1.1;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 4px 8px 22px;
 }
 
-.admin-sidebar__brand-name {
-  font-family: var(--a-font-head);
-  font-style: italic;
-  font-weight: 500;
-  font-size: 17px;
-  color: #fff;
+/* Volledig logo, niet bijgesneden, geen schild/vlak eromheen */
+.admin-sidebar__logo {
+  width: 100%;
+  max-width: 180px;
+  height: auto;
+  object-fit: contain;
+  display: block;
 }
 
 .admin-sidebar__brand-sub {
   font-family: var(--a-font-hand);
-  font-size: 14px;
+  font-size: 15px;
   color: var(--a-oranje);
+  padding-left: 4px;
 }
 
 .admin-sidebar__nav {
