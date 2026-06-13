@@ -17,6 +17,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { createShopOrder, type CreateOrderResult } from "@/app/(frontend)/winkel/checkout-actions";
+import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
 
 type Category = {
   id: string;
@@ -400,7 +401,7 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                       </>
                     )}
                   </button>
-                  {mode === "camper" && booking?.linked && booking?.bookingId && (
+                  {OP_REKENING_ENABLED && mode === "camper" && booking?.linked && booking?.bookingId && (
                     <button
                       onClick={() => checkout("tab")}
                       disabled={!confirmed || pending || cart.length === 0}

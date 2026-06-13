@@ -13,6 +13,7 @@ import {
 import type { GuestSession } from "../actions";
 import { fetchBreadItems } from "./load";
 import { createBreadOrder } from "@/app/(frontend)/winkel/checkout-actions";
+import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
 
 type BreadItem = {
   id: string;
@@ -42,8 +43,9 @@ export default function BroodjesPage() {
     try {
       const parsed = JSON.parse(raw) as GuestSession;
       setBooking(parsed);
-      // "Op rekening" alleen voorselecteren als er een echte boeking gekoppeld is.
-      if (parsed.linked && parsed.bookingId) setPaymentMethod("tab");
+      // "Op rekening" alleen voorselecteren als de functie aanstaat én er een
+      // echte boeking gekoppeld is.
+      if (OP_REKENING_ENABLED && parsed.linked && parsed.bookingId) setPaymentMethod("tab");
     } catch {
       router.replace("/winkel/camping");
     }
@@ -248,7 +250,7 @@ export default function BroodjesPage() {
               <span className="text-xl font-bold">€{total.toFixed(2)}</span>
             </div>
 
-            {booking?.linked && booking?.bookingId ? (
+            {OP_REKENING_ENABLED && booking?.linked && booking?.bookingId && (
               <div className="mt-4 grid grid-cols-2 gap-2 rounded-pill bg-rand-zacht p-1">
                 <button
                   onClick={() => setPaymentMethod("tab")}
@@ -271,10 +273,6 @@ export default function BroodjesPage() {
                   Direct betalen
                 </button>
               </div>
-            ) : (
-              <p className="mt-4 text-xs text-tekst-grijs">
-                Je rekent direct af. Op rekening zetten kan zodra je verblijf bij de receptie is gekoppeld.
-              </p>
             )}
 
             {error && (

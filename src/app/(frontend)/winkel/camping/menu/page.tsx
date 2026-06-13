@@ -11,6 +11,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import type { GuestSession } from "../actions";
+import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
 
 export default function CamperMenuPage() {
   const router = useRouter();
@@ -88,13 +89,15 @@ export default function CamperMenuPage() {
             subtitle="Bestellen voor 20:00, bezorgen om 8:30"
             accent="oranje"
           />
-          <MenuLink
-            href="/winkel/camping/rekening"
-            icon={Receipt}
-            title="Mijn rekening"
-            subtitle="Open posten en zelf afrekenen"
-            accent="paars"
-          />
+          {OP_REKENING_ENABLED && (
+            <MenuLink
+              href="/winkel/camping/rekening"
+              icon={Receipt}
+              title="Mijn rekening"
+              subtitle="Open posten en zelf afrekenen"
+              accent="paars"
+            />
+          )}
         </div>
 
         {/* Logout */}
