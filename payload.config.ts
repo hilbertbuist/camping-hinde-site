@@ -44,14 +44,18 @@ export default buildConfig({
   },
   // In productie (Vercel) gebruiken we Vercel Postgres (POSTGRES_URL auto-injected).
   // Lokaal valt het terug op SQLite voor snel ontwikkelen zonder DB-setup.
+  // `push: true` zorgt dat Payload bij eerste deploy automatisch alle tabellen
+  // aanmaakt op basis van de collections — geen losse migratie nodig.
   db: process.env.POSTGRES_URL
     ? vercelPostgresAdapter({
         pool: { connectionString: process.env.POSTGRES_URL },
+        push: true,
       })
     : sqliteAdapter({
         client: {
           url: process.env.DATABASE_URI || "file:./payload.db",
         },
+        push: true,
       }),
   sharp,
   upload: {
