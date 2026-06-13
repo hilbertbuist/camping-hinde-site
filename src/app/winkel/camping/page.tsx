@@ -6,10 +6,14 @@ import { useRouter } from "next/navigation";
 import { Tent, ArrowRight, AlertCircle } from "lucide-react";
 import { verifyBooking } from "./actions";
 
+/**
+ * Camping-gast login.
+ * Op dit moment (zomer 2026, vóór uwbooking-sync) gebruiken we alleen
+ * veldnummer/veldnaam + achternaam. Het boekingsnummer-veld is verborgen
+ * tot er een synchronisatie met uwbooking is.
+ */
 export default function CampingLoginPage() {
   const router = useRouter();
-  const [tab, setTab] = useState<"booking" | "site">("site");
-  const [bookingRef, setBookingRef] = useState("");
   const [siteNumber, setSiteNumber] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -28,8 +32,7 @@ export default function CampingLoginPage() {
     setError(null);
     startTransition(async () => {
       const fd = new FormData();
-      fd.set("mode", tab);
-      fd.set("bookingRef", bookingRef);
+      fd.set("mode", "site");
       fd.set("siteNumber", siteNumber);
       fd.set("lastName", lastName);
       const res = await verifyBooking(fd);
@@ -37,7 +40,7 @@ export default function CampingLoginPage() {
         localStorage.setItem("hinde:booking", JSON.stringify(res.booking));
         router.push("/winkel/camping/menu");
       } else {
-        setError(res.error ?? "We konden je boeking niet vinden.");
+        setError(res.error ?? "We konden je verblijf niet vinden.");
       }
     });
   };
@@ -50,59 +53,26 @@ export default function CampingLoginPage() {
             <Tent className="h-7 w-7" aria-hidden />
           </span>
           <h1 className="mt-5 text-3xl font-bold tracking-tight text-tekst-donker">
-            Welkom terug
+            Welkom op De Hinde
           </h1>
           <p className="mt-2 text-sm text-tekst-grijs">
-            Log even in zodat we je verblijf kunnen koppelen.
+            Vul je veldnummer of veldnaam in om te beginnen.
           </p>
         </div>
 
-        {/* Tab toggle */}
-        <div className="mt-8 grid grid-cols-2 gap-2 rounded-pill bg-rand-zacht p-1">
-          <button
-            type="button"
-            onClick={() => setTab("site")}
-            className={`rounded-pill py-2.5 text-sm font-medium transition ${
-              tab === "site" ? "bg-wit text-tekst-donker shadow" : "text-tekst-grijs"
-            }`}
-          >
-            Plaatsnummer
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab("booking")}
-            className={`rounded-pill py-2.5 text-sm font-medium transition ${
-              tab === "booking" ? "bg-wit text-tekst-donker shadow" : "text-tekst-grijs"
-            }`}
-          >
-            Boekingsnummer
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          {tab === "site" ? (
-            <Field
-              label="Campingplaats- / accommodatienummer"
-              hint="Bijv. 7 of Safaritent"
-              value={siteNumber}
-              onChange={setSiteNumber}
-              required
-              autoFocus
-            />
-          ) : (
-            <Field
-              label="Boekingsnummer"
-              hint="Te vinden in je bevestigingsmail"
-              value={bookingRef}
-              onChange={setBookingRef}
-              required
-              autoFocus
-            />
-          )}
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <Field
+            label="Veldnummer of veldnaam"
+            hint="Bijv. 7, Grutto, Safaritent 1 of Hindehut"
+            value={siteNumber}
+            onChange={setSiteNumber}
+            required
+            autoFocus
+          />
 
           <Field
             label="Achternaam"
-            hint="Zoals bekend bij de boeking"
+            hint="Zoals bekend bij je verblijf"
             value={lastName}
             onChange={setLastName}
             required
@@ -124,6 +94,15 @@ export default function CampingLoginPage() {
             <ArrowRight className="h-4 w-4" aria-hidden />
           </button>
         </form>
+
+        <div className="mt-6 text-center">
+          <p className="text-xs text-tekst-grijs">
+            Niet gevonden? Loop even langs bij Dora of bel{" "}
+            <a href="tel:0649535458" className="text-tekst-donker underline">
+              06-49535458
+            </a>
+          </p>
+        </div>
 
         <div className="mt-6 text-center">
           <Link href="/winkel" className="text-sm text-tekst-grijs hover:text-tekst-donker">
