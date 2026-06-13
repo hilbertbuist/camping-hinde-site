@@ -16,7 +16,7 @@ export default async function NieuweCategoriePage() {
 
   async function action(formData: FormData) {
     "use server";
-    await createCategory(formData);
+    return createCategory(formData);
   }
 
   return (

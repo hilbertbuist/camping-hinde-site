@@ -64,12 +64,12 @@ export default async function BewerkProductPage({
 
   async function action(formData: FormData) {
     "use server";
-    await updateProduct(id, formData);
+    return updateProduct(id, formData);
   }
 
   async function remove() {
     "use server";
-    await deleteProduct(id);
+    return deleteProduct(id);
   }
 
   return (

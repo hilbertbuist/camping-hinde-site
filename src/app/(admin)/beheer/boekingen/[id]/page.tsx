@@ -31,8 +31,15 @@ export default async function BewerkBoekingPage({
     notes: doc.notes,
   };
 
-  const updateAction = updateBooking.bind(null, id);
-  const deleteAction = deleteBooking.bind(null, id);
+  async function action(formData: FormData) {
+    "use server";
+    return updateBooking(id, formData);
+  }
+
+  async function remove() {
+    "use server";
+    return deleteBooking(id);
+  }
 
   return (
     <>
@@ -43,8 +50,8 @@ export default async function BewerkBoekingPage({
       <BookingForm
         mode="edit"
         initial={initial}
-        action={updateAction}
-        deleteAction={deleteAction}
+        action={action}
+        deleteAction={remove}
       />
     </>
   );

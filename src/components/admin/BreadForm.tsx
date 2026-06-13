@@ -30,8 +30,8 @@ type BreadFormProps = {
   mode: "create" | "edit";
   initial?: BreadFormValues;
   mediaOptions: Option[];
-  action: (formData: FormData) => Promise<void>;
-  deleteAction?: () => Promise<void>;
+  action: (formData: FormData) => Promise<{ ok: boolean; error?: string }>;
+  deleteAction?: () => Promise<{ ok: boolean; error?: string }>;
 };
 
 export function BreadForm({ mode, initial, mediaOptions, action, deleteAction }: BreadFormProps) {
@@ -46,7 +46,11 @@ export function BreadForm({ mode, initial, mediaOptions, action, deleteAction }:
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       try {
-        await action(formData);
+        const res = await action(formData);
+        if (!res?.ok) {
+          setError(res?.error ?? "Opslaan mislukt. Probeer het opnieuw.");
+          return;
+        }
         router.push("/beheer/broodjes");
         router.refresh();
       } catch (err) {
@@ -61,7 +65,11 @@ export function BreadForm({ mode, initial, mediaOptions, action, deleteAction }:
     setError(null);
     startDelete(async () => {
       try {
-        await deleteAction();
+        const res = await deleteAction();
+        if (!res?.ok) {
+          setError(res?.error ?? "Verwijderen mislukt.");
+          return;
+        }
         router.push("/beheer/broodjes");
         router.refresh();
       } catch (err) {

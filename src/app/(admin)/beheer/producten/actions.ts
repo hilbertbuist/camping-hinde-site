@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
 
 function parseProduct(formData: FormData) {
   const trackStock = formData.get("trackStock") === "on" || formData.get("trackStock") === "true";
@@ -33,20 +33,41 @@ function parseProduct(formData: FormData) {
   };
 }
 
-export async function createProduct(formData: FormData) {
-  const data = parseProduct(formData);
-  await createDoc("products", data);
-  revalidatePath("/beheer/producten");
+export async function createProduct(formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseProduct(formData);
+    if (!data.category) {
+      return { ok: false, error: "Kies een categorie. Maak er eerst een aan onder ‘Categorieën’ als de lijst leeg is." };
+    }
+    const { id } = await createDoc("products", data);
+    revalidatePath("/beheer/producten");
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function updateProduct(id: string, formData: FormData) {
-  const data = parseProduct(formData);
-  await updateDoc("products", id, data);
-  revalidatePath("/beheer/producten");
-  revalidatePath(`/beheer/producten/${id}`);
+export async function updateProduct(id: string, formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseProduct(formData);
+    if (!data.category) {
+      return { ok: false, error: "Kies een categorie." };
+    }
+    await updateDoc("products", id, data);
+    revalidatePath("/beheer/producten");
+    revalidatePath(`/beheer/producten/${id}`);
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function deleteProduct(id: string) {
-  await deleteDoc("products", id);
-  revalidatePath("/beheer/producten");
+export async function deleteProduct(id: string): Promise<SaveResult> {
+  try {
+    await deleteDoc("products", id);
+    revalidatePath("/beheer/producten");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }

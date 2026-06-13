@@ -22,7 +22,7 @@ export default async function NieuwProductPage() {
 
   async function action(formData: FormData) {
     "use server";
-    await createProduct(formData);
+    return createProduct(formData);
   }
 
   return (

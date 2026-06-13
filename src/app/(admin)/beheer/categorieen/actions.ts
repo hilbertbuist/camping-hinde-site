@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
 
 function parseCategory(formData: FormData) {
   const active = formData.get("active") === "on" || formData.get("active") === "true";
@@ -24,20 +24,35 @@ function parseCategory(formData: FormData) {
   };
 }
 
-export async function createCategory(formData: FormData) {
-  const data = parseCategory(formData);
-  await createDoc("product-categories", data);
-  revalidatePath("/beheer/categorieen");
+export async function createCategory(formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseCategory(formData);
+    const { id } = await createDoc("product-categories", data);
+    revalidatePath("/beheer/categorieen");
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function updateCategory(id: string, formData: FormData) {
-  const data = parseCategory(formData);
-  await updateDoc("product-categories", id, data);
-  revalidatePath("/beheer/categorieen");
-  revalidatePath(`/beheer/categorieen/${id}`);
+export async function updateCategory(id: string, formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseCategory(formData);
+    await updateDoc("product-categories", id, data);
+    revalidatePath("/beheer/categorieen");
+    revalidatePath(`/beheer/categorieen/${id}`);
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function deleteCategory(id: string) {
-  await deleteDoc("product-categories", id);
-  revalidatePath("/beheer/categorieen");
+export async function deleteCategory(id: string): Promise<SaveResult> {
+  try {
+    await deleteDoc("product-categories", id);
+    revalidatePath("/beheer/categorieen");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }

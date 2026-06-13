@@ -45,8 +45,8 @@ type CategoryFormProps = {
   mode: "create" | "edit";
   initial?: CategoryFormValues;
   mediaOptions: Option[];
-  action: (formData: FormData) => Promise<void>;
-  deleteAction?: () => Promise<void>;
+  action: (formData: FormData) => Promise<{ ok: boolean; error?: string }>;
+  deleteAction?: () => Promise<{ ok: boolean; error?: string }>;
 };
 
 function slugify(value: string) {
@@ -86,7 +86,11 @@ export function CategoryForm({
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       try {
-        await action(formData);
+        const res = await action(formData);
+        if (!res?.ok) {
+          setError(res?.error ?? "Opslaan mislukt. Probeer het opnieuw.");
+          return;
+        }
         router.push("/beheer/categorieen");
         router.refresh();
       } catch (err) {
@@ -101,7 +105,11 @@ export function CategoryForm({
     setError(null);
     startDelete(async () => {
       try {
-        await deleteAction();
+        const res = await deleteAction();
+        if (!res?.ok) {
+          setError(res?.error ?? "Verwijderen mislukt.");
+          return;
+        }
         router.push("/beheer/categorieen");
         router.refresh();
       } catch (err) {

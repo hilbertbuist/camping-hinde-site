@@ -14,10 +14,15 @@ export default async function NieuwBroodjePage() {
     label: m.alt || m.filename || String(m.id),
   }));
 
+  async function action(formData: FormData) {
+    "use server";
+    return createBread(formData);
+  }
+
   return (
     <>
       <PageHeader title="Nieuw broodje" description="Voeg een item toe aan het bestelmenu" />
-      <BreadForm mode="create" mediaOptions={mediaOptions} action={createBread} />
+      <BreadForm mode="create" mediaOptions={mediaOptions} action={action} />
     </>
   );
 }

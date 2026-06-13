@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
 
 const VALID_STATUSES = ["active", "upcoming", "closed", "cancelled"];
 
@@ -37,29 +37,44 @@ function generateReference() {
   return `DH-${stamp}`;
 }
 
-export async function createBooking(formData: FormData) {
-  const data = parseBooking(formData);
-  const refInput = ((formData.get("reference") as string | null) || "").trim();
-  const reference = refInput || generateReference();
-  await createDoc("bookings", {
-    ...data,
-    reference,
-    externalSource: "manual",
-  });
-  revalidatePath("/beheer/boekingen");
+export async function createBooking(formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseBooking(formData);
+    const refInput = ((formData.get("reference") as string | null) || "").trim();
+    const reference = refInput || generateReference();
+    const { id } = await createDoc("bookings", {
+      ...data,
+      reference,
+      externalSource: "manual",
+    });
+    revalidatePath("/beheer/boekingen");
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function updateBooking(id: string, formData: FormData) {
-  const data = parseBooking(formData);
-  const refInput = ((formData.get("reference") as string | null) || "").trim();
-  const payload: Record<string, unknown> = { ...data };
-  if (refInput) payload.reference = refInput;
-  await updateDoc("bookings", id, payload);
-  revalidatePath("/beheer/boekingen");
-  revalidatePath(`/beheer/boekingen/${id}`);
+export async function updateBooking(id: string, formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseBooking(formData);
+    const refInput = ((formData.get("reference") as string | null) || "").trim();
+    const payload: Record<string, unknown> = { ...data };
+    if (refInput) payload.reference = refInput;
+    await updateDoc("bookings", id, payload);
+    revalidatePath("/beheer/boekingen");
+    revalidatePath(`/beheer/boekingen/${id}`);
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function deleteBooking(id: string) {
-  await deleteDoc("bookings", id);
-  revalidatePath("/beheer/boekingen");
+export async function deleteBooking(id: string): Promise<SaveResult> {
+  try {
+    await deleteDoc("bookings", id);
+    revalidatePath("/beheer/boekingen");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }

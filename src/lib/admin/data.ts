@@ -46,6 +46,41 @@ export async function getDoc<T = any>(
   }
 }
 
+export type SaveResult = { ok: boolean; id?: string; error?: string };
+
+/**
+ * Zet een Payload-/databasefout om naar een leesbare Nederlandse melding.
+ * In productie verbergt Next de echte fouttekst; daarom vangen we de fout
+ * hier (server-side) af en geven we zelf een nette boodschap terug.
+ */
+export function friendlyError(err: unknown): string {
+  const e = err as {
+    name?: string;
+    message?: string;
+    data?: { errors?: { label?: string; message?: string; path?: string }[] };
+  };
+
+  // Payload ValidationError bevat per veld een label + melding.
+  const fieldErrors = e?.data?.errors;
+  if (Array.isArray(fieldErrors) && fieldErrors.length > 0) {
+    const fields = fieldErrors
+      .map((f) => f.label || f.path)
+      .filter(Boolean)
+      .join(", ");
+    if (fields) return `Controleer deze velden: ${fields}.`;
+  }
+
+  const msg = e?.message ?? "";
+  if (/duplicate|unique/i.test(msg)) {
+    return "Er bestaat al een item met deze naam of slug. Kies een andere.";
+  }
+  if (/not-null|null value|violates not-null/i.test(msg)) {
+    return "Een verplicht veld is leeg. Vul alle verplichte velden in.";
+  }
+  if (msg && !/server components render/i.test(msg)) return msg;
+  return "Opslaan mislukt. Controleer de velden en probeer het opnieuw.";
+}
+
 export async function createDoc(collection: string, data: any): Promise<{ id: string }> {
   const p = await payload();
   const doc = await p.create({ collection: collection as any, data });

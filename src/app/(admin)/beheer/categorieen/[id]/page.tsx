@@ -55,12 +55,12 @@ export default async function BewerkCategoriePage({
 
   async function action(formData: FormData) {
     "use server";
-    await updateCategory(id, formData);
+    return updateCategory(id, formData);
   }
 
   async function remove() {
     "use server";
-    await deleteCategory(id);
+    return deleteCategory(id);
   }
 
   return (

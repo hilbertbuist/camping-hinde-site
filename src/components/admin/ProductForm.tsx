@@ -38,8 +38,8 @@ type ProductFormProps = {
   initial?: ProductFormValues;
   categoryOptions: Option[];
   mediaOptions: Option[];
-  action: (formData: FormData) => Promise<void>;
-  deleteAction?: () => Promise<void>;
+  action: (formData: FormData) => Promise<{ ok: boolean; error?: string }>;
+  deleteAction?: () => Promise<{ ok: boolean; error?: string }>;
 };
 
 function slugify(value: string) {
@@ -80,7 +80,11 @@ export function ProductForm({
     const formData = new FormData(e.currentTarget);
     startTransition(async () => {
       try {
-        await action(formData);
+        const res = await action(formData);
+        if (!res?.ok) {
+          setError(res?.error ?? "Opslaan mislukt. Probeer het opnieuw.");
+          return;
+        }
         router.push("/beheer/producten");
         router.refresh();
       } catch (err) {
@@ -95,7 +99,11 @@ export function ProductForm({
     setError(null);
     startDelete(async () => {
       try {
-        await deleteAction();
+        const res = await deleteAction();
+        if (!res?.ok) {
+          setError(res?.error ?? "Verwijderen mislukt.");
+          return;
+        }
         router.push("/beheer/producten");
         router.refresh();
       } catch (err) {
@@ -106,10 +114,38 @@ export function ProductForm({
 
   const busy = isPending || isDeleting;
 
+  const noCategories = categoryOptions.length === 0;
+
   return (
     <form onSubmit={handleSubmit}>
       <AdminCard>
         <div style={{ display: "grid", gap: "1.25rem" }}>
+          {noCategories && (
+            <div
+              role="note"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: "0.75rem",
+                background: "color-mix(in srgb, var(--a-oranje) 14%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--a-oranje) 45%, transparent)",
+                color: "var(--a-tekst)",
+                borderRadius: 12,
+                padding: "0.85rem 1rem",
+              }}
+            >
+              <span>
+                Je hebt nog geen <strong>categorieën</strong>. Een product heeft een categorie nodig — maak er eerst één aan.
+              </span>
+              <span style={{ marginLeft: "auto" }}>
+                <AdminButton type="button" variant="outline" size="sm" href="/beheer/categorieen/nieuw">
+                  Categorie aanmaken
+                </AdminButton>
+              </span>
+            </div>
+          )}
+
           <FormField label="Productnaam" htmlFor="name">
             <input
               id="name"
@@ -258,7 +294,7 @@ export function ProductForm({
           )}
 
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
-            <AdminButton type="submit" variant="primary" disabled={busy}>
+            <AdminButton type="submit" variant="primary" disabled={busy || (mode === "create" && noCategories)}>
               {isPending ? "Opslaan…" : mode === "create" ? "Product aanmaken" : "Wijzigingen opslaan"}
             </AdminButton>
             <AdminButton type="button" variant="ghost" href="/beheer/producten" disabled={busy}>

@@ -44,8 +44,15 @@ export default async function BewerkBroodjePage({
     active: doc.active,
   };
 
-  const updateAction = updateBread.bind(null, id);
-  const deleteAction = deleteBread.bind(null, id);
+  async function action(formData: FormData) {
+    "use server";
+    return updateBread(id, formData);
+  }
+
+  async function remove() {
+    "use server";
+    return deleteBread(id);
+  }
 
   return (
     <>
@@ -54,8 +61,8 @@ export default async function BewerkBroodjePage({
         mode="edit"
         initial={initial}
         mediaOptions={mediaOptions}
-        action={updateAction}
-        deleteAction={deleteAction}
+        action={action}
+        deleteAction={remove}
       />
     </>
   );

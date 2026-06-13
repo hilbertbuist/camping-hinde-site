@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { createDoc, updateDoc, deleteDoc } from "@/lib/admin/data";
+import { createDoc, updateDoc, deleteDoc, friendlyError, type SaveResult } from "@/lib/admin/data";
 
 const CATEGORIES = ["broodje-zacht", "broodje-hard", "croissant", "eieren", "anders"];
 
@@ -31,20 +31,35 @@ function parseBread(formData: FormData) {
   };
 }
 
-export async function createBread(formData: FormData) {
-  const data = parseBread(formData);
-  await createDoc("bread-items", data);
-  revalidatePath("/beheer/broodjes");
+export async function createBread(formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseBread(formData);
+    const { id } = await createDoc("bread-items", data);
+    revalidatePath("/beheer/broodjes");
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function updateBread(id: string, formData: FormData) {
-  const data = parseBread(formData);
-  await updateDoc("bread-items", id, data);
-  revalidatePath("/beheer/broodjes");
-  revalidatePath(`/beheer/broodjes/${id}`);
+export async function updateBread(id: string, formData: FormData): Promise<SaveResult> {
+  try {
+    const data = parseBread(formData);
+    await updateDoc("bread-items", id, data);
+    revalidatePath("/beheer/broodjes");
+    revalidatePath(`/beheer/broodjes/${id}`);
+    return { ok: true, id };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
 
-export async function deleteBread(id: string) {
-  await deleteDoc("bread-items", id);
-  revalidatePath("/beheer/broodjes");
+export async function deleteBread(id: string): Promise<SaveResult> {
+  try {
+    await deleteDoc("bread-items", id);
+    revalidatePath("/beheer/broodjes");
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: friendlyError(err) };
+  }
 }
