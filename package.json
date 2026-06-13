@@ -35,6 +35,7 @@
     "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "png-to-ico": "^3.0.1",
     "tailwindcss": "^4",
     "tsx": "^4.22.4",
     "typescript": "^5"
