@@ -1,6 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "regions": ["fra1"],
+  "buildCommand": "NODE_ENV=development payload run scripts/init-db.ts && next build",
   "functions": {
     "src/app/(payload)/admin/[[...segments]]/page.tsx": {
       "maxDuration": 60

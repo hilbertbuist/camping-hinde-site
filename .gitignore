@@ -53,3 +53,5 @@ payload.db-journal
 # os
 Thumbs.db
 desktop.ini
+
+.vercel
