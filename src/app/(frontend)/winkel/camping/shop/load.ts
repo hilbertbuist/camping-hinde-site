@@ -2,6 +2,25 @@
 
 import { payload } from "@/lib/payload";
 
+type MediaLike =
+  | {
+      url?: string | null;
+      sizes?: {
+        card?: { url?: string | null };
+        thumbnail?: { url?: string | null };
+      } | null;
+    }
+  | string
+  | number
+  | null
+  | undefined;
+
+/** Haalt een bruikbare afbeelding-URL uit een (gepopuleerde) media-relatie. */
+function imageUrlOf(image: MediaLike): string | undefined {
+  if (!image || typeof image !== "object") return undefined;
+  return image.url ?? image.sizes?.card?.url ?? image.sizes?.thumbnail?.url ?? undefined;
+}
+
 export async function fetchShopData() {
   try {
     const p = await payload();
@@ -16,6 +35,7 @@ export async function fetchShopData() {
       where: { active: { equals: true } },
       limit: 500,
       sort: "name",
+      depth: 1,
     });
 
     return {
@@ -35,10 +55,7 @@ export async function fetchShopData() {
         description: pr.description ?? undefined,
         categoryId:
           typeof pr.category === "object" ? String(pr.category.id) : String(pr.category),
-        imageUrl:
-          typeof pr.image === "object" && pr.image && "url" in pr.image
-            ? (pr.image as { url: string }).url
-            : undefined,
+        imageUrl: imageUrlOf(pr.image),
       })),
     };
   } catch {

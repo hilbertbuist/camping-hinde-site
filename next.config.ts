@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.unsplash.com",
       },
+      {
+        // Vercel Blob (media-opslag in productie)
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
+      },
     ],
     formats: ["image/avif", "image/webp"],
   },
