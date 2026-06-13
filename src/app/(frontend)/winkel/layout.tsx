@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -7,12 +7,15 @@ export const metadata: Metadata = {
   description:
     "Lokale streekproducten en broodjes van Boerderijcamping De Hinde. Zelfscan en betalen via de app.",
   manifest: "/manifest.json",
-  themeColor: "#5A1F6B",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
     title: "De Hinde Winkel",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#5A1F6B",
 };
 
 export default function WinkelLayout({
