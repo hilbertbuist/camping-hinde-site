@@ -6,13 +6,17 @@ import { createCategory } from "../actions";
 
 export const dynamic = "force-dynamic";
 
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 
 export default async function NieuweCategoriePage() {
   await requireAdmin();
 
   const media = await listDocs<Media>("media", { sort: "-createdAt", limit: 200 });
-  const mediaOptions = media.map((m) => ({ id: m.id, label: m.alt || m.filename || m.id }));
+  const mediaOptions = media.map((m) => ({
+    id: m.id,
+    label: m.alt || m.filename || m.id,
+    url: m.sizes?.thumbnail?.url ?? m.url,
+  }));
 
   async function action(formData: FormData) {
     "use server";

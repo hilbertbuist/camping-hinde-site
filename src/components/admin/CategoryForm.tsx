@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AdminButton } from "@/components/admin/ui/AdminButton";
 import { AdminCard } from "@/components/admin/ui/AdminCard";
 import { FormField, inputClass } from "@/components/admin/ui/FormField";
+import { ImageUploadCrop } from "@/components/admin/ImageUploadCrop";
 
 const ICON_OPTIONS = [
   { label: "Vlees", value: "beef" },
@@ -35,11 +36,12 @@ export type CategoryFormValues = {
   icon?: string;
   color?: string;
   image?: string | null;
+  imageUrl?: string | null;
   order?: number;
   active?: boolean;
 };
 
-type Option = { id: string; label: string };
+type Option = { id: string; label: string; url?: string };
 
 type CategoryFormProps = {
   mode: "create" | "edit";
@@ -207,20 +209,16 @@ export function CategoryForm({
             </FormField>
           </div>
 
-          <FormField label="Categorie-afbeelding" htmlFor="image" hint="Kies een bestaand mediabestand.">
-            <select
-              id="image"
+          <FormField
+            label="Categorie-afbeelding"
+            hint="Upload een foto en snijd 'm zelf bij — of kies uit de mediabank."
+          >
+            <ImageUploadCrop
               name="image"
-              className={inputClass}
-              defaultValue={initial?.image ?? ""}
-            >
-              <option value="">Geen afbeelding gekoppeld</option>
-              {mediaOptions.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              initialId={initial?.image ?? null}
+              initialUrl={initial?.imageUrl ?? null}
+              mediaOptions={mediaOptions}
+            />
           </FormField>
 
           <FormField label="Volgorde" htmlFor="order" hint="Lager getal = hoger in de lijst.">

@@ -8,7 +8,7 @@ import { updateProduct, deleteProduct } from "../actions";
 export const dynamic = "force-dynamic";
 
 type Category = { id: string; name?: string };
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 type Product = {
   id: string;
   name?: string;
@@ -46,14 +46,24 @@ export default async function BewerkProductPage({
   if (!product) notFound();
 
   const categoryOptions = categories.map((c) => ({ id: c.id, label: c.name ?? c.id }));
-  const mediaOptions = media.map((m) => ({ id: m.id, label: m.alt || m.filename || m.id }));
+  const mediaOptions = media.map((m) => ({
+    id: m.id,
+    label: m.alt || m.filename || m.id,
+    url: m.sizes?.thumbnail?.url ?? m.url,
+  }));
+
+  const imageId = relId(product.image);
+  const imageUrl = imageId
+    ? mediaOptions.find((m) => String(m.id) === String(imageId))?.url ?? null
+    : null;
 
   const initial: ProductFormValues = {
     name: product.name,
     slug: product.slug,
     category: relId(product.category),
     description: product.description,
-    image: relId(product.image),
+    image: imageId,
+    imageUrl,
     price: product.price,
     unit: product.unit,
     stock: product.stock,

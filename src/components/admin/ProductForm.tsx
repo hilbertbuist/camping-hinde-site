@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AdminButton } from "@/components/admin/ui/AdminButton";
 import { AdminCard } from "@/components/admin/ui/AdminCard";
 import { FormField, inputClass } from "@/components/admin/ui/FormField";
+import { ImageUploadCrop } from "@/components/admin/ImageUploadCrop";
 
 const UNIT_OPTIONS = [
   { label: "per stuk", value: "stuk" },
@@ -29,9 +30,10 @@ export type ProductFormValues = {
   trackStock?: boolean;
   active?: boolean;
   supplier?: string;
+  imageUrl?: string | null;
 };
 
-type Option = { id: string; label: string };
+type Option = { id: string; label: string; url?: string };
 
 type ProductFormProps = {
   mode: "create" | "edit";
@@ -230,20 +232,16 @@ export function ProductForm({
             </FormField>
           </div>
 
-          <FormField label="Afbeelding" htmlFor="image" hint="Kies een bestaand mediabestand.">
-            <select
-              id="image"
+          <FormField
+            label="Afbeelding"
+            hint="Upload een foto en snijd 'm zelf bij — of kies uit de mediabank. Wordt geoptimaliseerd opgeslagen."
+          >
+            <ImageUploadCrop
               name="image"
-              className={inputClass}
-              defaultValue={initial?.image ?? ""}
-            >
-              <option value="">Geen afbeelding gekoppeld</option>
-              {mediaOptions.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              initialId={initial?.image ?? null}
+              initialUrl={initial?.imageUrl ?? null}
+              mediaOptions={mediaOptions}
+            />
           </FormField>
 
           <FormField label="Leverancier (lokaal)" htmlFor="supplier" hint="Optioneel, bijv. 'Slagerij Berg, Dronten'.">

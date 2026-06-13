@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { AdminButton } from "@/components/admin/ui/AdminButton";
 import { AdminCard } from "@/components/admin/ui/AdminCard";
 import { FormField, inputClass } from "@/components/admin/ui/FormField";
+import { ImageUploadCrop } from "@/components/admin/ImageUploadCrop";
 
 const CATEGORY_OPTIONS = [
   { label: "Broodje (zacht)", value: "broodje-zacht" },
@@ -19,12 +20,13 @@ export type BreadFormValues = {
   description?: string;
   price?: number;
   image?: string | null;
+  imageUrl?: string | null;
   category?: string;
   order?: number;
   active?: boolean;
 };
 
-type Option = { id: string; label: string };
+type Option = { id: string; label: string; url?: string };
 
 type BreadFormProps = {
   mode: "create" | "edit";
@@ -135,20 +137,16 @@ export function BreadForm({ mode, initial, mediaOptions, action, deleteAction }:
             </FormField>
           </div>
 
-          <FormField label="Foto" htmlFor="image" hint="Kies een bestaand mediabestand.">
-            <select
-              id="image"
+          <FormField
+            label="Foto"
+            hint="Upload een foto en snijd 'm zelf bij — of kies uit de mediabank."
+          >
+            <ImageUploadCrop
               name="image"
-              className={inputClass}
-              defaultValue={initial?.image ?? ""}
-            >
-              <option value="">Geen foto gekoppeld</option>
-              {mediaOptions.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              initialId={initial?.image ?? null}
+              initialUrl={initial?.imageUrl ?? null}
+              mediaOptions={mediaOptions}
+            />
           </FormField>
 
           <FormField label="Volgorde" htmlFor="order" hint="Lagere nummers staan bovenaan in het menu.">

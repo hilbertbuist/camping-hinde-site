@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { BreadForm, type BreadFormValues } from "@/components/admin/BreadForm";
 import { updateBread, deleteBread } from "../actions";
 
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 type BreadItem = Omit<BreadFormValues, "image"> & {
   id: string;
   image?: { id: string } | string | null;
@@ -29,16 +29,21 @@ export default async function BewerkBroodjePage({
   const mediaOptions = media.map((m) => ({
     id: String(m.id),
     label: m.alt || m.filename || String(m.id),
+    url: m.sizes?.thumbnail?.url ?? m.url,
   }));
 
   const imageId =
     typeof doc.image === "object" && doc.image ? String(doc.image.id) : (doc.image ?? null);
+  const imageUrl = imageId
+    ? mediaOptions.find((m) => String(m.id) === String(imageId))?.url ?? null
+    : null;
 
   const initial: BreadFormValues = {
     name: doc.name,
     description: doc.description,
     price: doc.price,
     image: imageId,
+    imageUrl,
     category: doc.category,
     order: doc.order,
     active: doc.active,

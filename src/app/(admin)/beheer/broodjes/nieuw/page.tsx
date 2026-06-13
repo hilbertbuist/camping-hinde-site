@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/admin/ui/PageHeader";
 import { BreadForm } from "@/components/admin/BreadForm";
 import { createBread } from "../actions";
 
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 
 export default async function NieuwBroodjePage() {
   await requireAdmin();
@@ -12,6 +12,7 @@ export default async function NieuwBroodjePage() {
   const mediaOptions = media.map((m) => ({
     id: String(m.id),
     label: m.alt || m.filename || String(m.id),
+    url: m.sizes?.thumbnail?.url ?? m.url,
   }));
 
   async function action(formData: FormData) {

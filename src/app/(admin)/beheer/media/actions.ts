@@ -52,6 +52,46 @@ export async function uploadMedia(formData: FormData): Promise<UploadResult> {
   }
 }
 
+/**
+ * Upload één (in de browser bijgesneden) afbeelding naar de mediabank en geef
+ * de id + url terug, zodat een formulier de afbeelding direct kan koppelen.
+ * sharp genereert de imageSizes (thumbnail/card/hero) = extra optimalisatie.
+ */
+export async function uploadImage(
+  formData: FormData,
+): Promise<{ ok: boolean; id?: string; url?: string; thumbUrl?: string; error?: string }> {
+  const file = formData.get("file");
+  const alt = ((formData.get("alt") as string | null) || "").trim();
+  if (!(file instanceof File) || file.size === 0) {
+    return { ok: false, error: "Geen afbeelding ontvangen." };
+  }
+  try {
+    const p = await payload();
+    const buf = Buffer.from(await file.arrayBuffer());
+    const doc = (await p.create({
+      collection: "media",
+      data: { alt: alt || file.name },
+      file: {
+        data: buf,
+        name: file.name || "afbeelding.webp",
+        mimetype: file.type || "image/webp",
+        size: file.size,
+      },
+    })) as { id: string | number; url?: string; sizes?: { thumbnail?: { url?: string } } };
+    revalidatePath("/beheer/media");
+    return {
+      ok: true,
+      id: String(doc.id),
+      url: doc.url,
+      thumbUrl: doc.sizes?.thumbnail?.url ?? doc.url,
+    };
+  } catch (err) {
+    console.error("[beheer/media] uploadImage failed:", err);
+    const message = err instanceof Error ? err.message : "Uploaden mislukt.";
+    return { ok: false, error: message };
+  }
+}
+
 export async function deleteMediaItem(id: string): Promise<{ ok: boolean; error?: string }> {
   try {
     await deleteDoc("media", id);

@@ -7,7 +7,7 @@ import { updateCategory, deleteCategory } from "../actions";
 
 export const dynamic = "force-dynamic";
 
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 type Category = {
   id: string;
   name?: string;
@@ -40,7 +40,16 @@ export default async function BewerkCategoriePage({
 
   if (!category) notFound();
 
-  const mediaOptions = media.map((m) => ({ id: m.id, label: m.alt || m.filename || m.id }));
+  const mediaOptions = media.map((m) => ({
+    id: m.id,
+    label: m.alt || m.filename || m.id,
+    url: m.sizes?.thumbnail?.url ?? m.url,
+  }));
+
+  const imageId = relId(category.image);
+  const imageUrl = imageId
+    ? mediaOptions.find((m) => String(m.id) === String(imageId))?.url ?? null
+    : null;
 
   const initial: CategoryFormValues = {
     name: category.name,
@@ -48,7 +57,8 @@ export default async function BewerkCategoriePage({
     description: category.description,
     icon: category.icon,
     color: category.color,
-    image: relId(category.image),
+    image: imageId,
+    imageUrl,
     order: category.order,
     active: category.active,
   };

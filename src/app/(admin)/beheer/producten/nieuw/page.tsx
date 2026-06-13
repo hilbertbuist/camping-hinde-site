@@ -7,7 +7,7 @@ import { createProduct } from "../actions";
 export const dynamic = "force-dynamic";
 
 type Category = { id: string; name?: string };
-type Media = { id: string; alt?: string; filename?: string };
+type Media = { id: string; alt?: string; filename?: string; url?: string; sizes?: { thumbnail?: { url?: string } } };
 
 export default async function NieuwProductPage() {
   await requireAdmin();
@@ -18,7 +18,11 @@ export default async function NieuwProductPage() {
   ]);
 
   const categoryOptions = categories.map((c) => ({ id: c.id, label: c.name ?? c.id }));
-  const mediaOptions = media.map((m) => ({ id: m.id, label: m.alt || m.filename || m.id }));
+  const mediaOptions = media.map((m) => ({
+    id: m.id,
+    label: m.alt || m.filename || m.id,
+    url: m.sizes?.thumbnail?.url ?? m.url,
+  }));
 
   async function action(formData: FormData) {
     "use server";
