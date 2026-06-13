@@ -12,6 +12,9 @@ import {
   Tent,
   Image as ImageIcon,
   Settings,
+  CalendarDays,
+  Newspaper,
+  Truck,
   LogOut,
   type LucideIcon,
 } from "lucide-react";
@@ -35,11 +38,16 @@ const NAV_GROUPS: NavGroup[] = [
   },
   {
     title: "Camping",
-    items: [{ label: "Boekingen", href: "/beheer/boekingen", icon: Tent }],
+    items: [
+      { label: "Boekingen", href: "/beheer/boekingen", icon: Tent },
+      { label: "Activiteiten", href: "/beheer/activiteiten", icon: CalendarDays },
+      { label: "Nieuws", href: "/beheer/nieuws", icon: Newspaper },
+    ],
   },
   {
     title: "Beheer",
     items: [
+      { label: "Leveranciers", href: "/beheer/leveranciers", icon: Truck },
       { label: "Media", href: "/beheer/media", icon: ImageIcon },
       { label: "Instellingen", href: "/beheer/instellingen", icon: Settings },
     ],

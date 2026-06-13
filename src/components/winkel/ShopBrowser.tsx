@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   ShoppingCart,
@@ -17,7 +17,7 @@ import {
   ShoppingBag,
 } from "lucide-react";
 import { createShopOrder, type CreateOrderResult } from "@/app/(frontend)/winkel/checkout-actions";
-import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
+import { fetchOpRekeningEnabled } from "@/app/(frontend)/winkel/settings-actions";
 
 type Category = {
   id: string;
@@ -80,6 +80,11 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const [opRekening, setOpRekening] = useState(false);
+
+  useEffect(() => {
+    fetchOpRekeningEnabled().then(setOpRekening).catch(() => setOpRekening(false));
+  }, []);
 
   const visibleProducts = useMemo(
     () =>
@@ -401,7 +406,7 @@ export function ShopBrowser({ mode, categories, products, booking }: Props) {
                       </>
                     )}
                   </button>
-                  {OP_REKENING_ENABLED && mode === "camper" && booking?.linked && booking?.bookingId && (
+                  {opRekening && mode === "camper" && booking?.linked && booking?.bookingId && (
                     <button
                       onClick={() => checkout("tab")}
                       disabled={!confirmed || pending || cart.length === 0}

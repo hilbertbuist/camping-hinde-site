@@ -8,6 +8,15 @@
     },
     "src/app/(payload)/api/[...slug]/route.ts": {
       "maxDuration": 60
+    },
+    "src/app/api/cron/bread-orders/route.ts": {
+      "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/bread-orders",
+      "schedule": "30 18 * * *"
+    }
+  ]
 }

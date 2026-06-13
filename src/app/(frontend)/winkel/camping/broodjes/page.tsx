@@ -13,7 +13,7 @@ import {
 import type { GuestSession } from "../actions";
 import { fetchBreadItems } from "./load";
 import { createBreadOrder } from "@/app/(frontend)/winkel/checkout-actions";
-import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
+import { fetchOpRekeningEnabled } from "@/app/(frontend)/winkel/settings-actions";
 
 type BreadItem = {
   id: string;
@@ -31,6 +31,7 @@ export default function BroodjesPage() {
   const [items, setItems] = useState<BreadItem[]>([]);
   const [quantities, setQuantities] = useState<Record<string, number>>({});
   const [paymentMethod, setPaymentMethod] = useState<"mollie" | "tab">("mollie");
+  const [opRekening, setOpRekening] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -43,13 +44,17 @@ export default function BroodjesPage() {
     try {
       const parsed = JSON.parse(raw) as GuestSession;
       setBooking(parsed);
-      // "Op rekening" alleen voorselecteren als de functie aanstaat én er een
-      // echte boeking gekoppeld is.
-      if (OP_REKENING_ENABLED && parsed.linked && parsed.bookingId) setPaymentMethod("tab");
     } catch {
       router.replace("/winkel/camping");
     }
+    fetchOpRekeningEnabled().then(setOpRekening).catch(() => setOpRekening(false));
   }, [router]);
+
+  // "Op rekening" voorselecteren zodra de functie aanstaat én er een echte
+  // boeking gekoppeld is.
+  useEffect(() => {
+    if (opRekening && booking?.linked && booking?.bookingId) setPaymentMethod("tab");
+  }, [opRekening, booking]);
 
   useEffect(() => {
     fetchBreadItems().then(setItems);
@@ -250,7 +255,7 @@ export default function BroodjesPage() {
               <span className="text-xl font-bold">€{total.toFixed(2)}</span>
             </div>
 
-            {OP_REKENING_ENABLED && booking?.linked && booking?.bookingId && (
+            {opRekening && booking?.linked && booking?.bookingId && (
               <div className="mt-4 grid grid-cols-2 gap-2 rounded-pill bg-rand-zacht p-1">
                 <button
                   onClick={() => setPaymentMethod("tab")}

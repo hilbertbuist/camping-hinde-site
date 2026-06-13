@@ -13,8 +13,13 @@ import { Products } from "./src/collections/Products";
 import { BreadItems } from "./src/collections/BreadItems";
 import { Bookings } from "./src/collections/Bookings";
 import { Orders } from "./src/collections/Orders";
+import { Suppliers } from "./src/collections/Suppliers";
+import { Activities } from "./src/collections/Activities";
+import { News } from "./src/collections/News";
+import { Settings } from "./src/collections/Settings";
 import * as initMigration from "./src/migrations/20260613_000000_init";
 import * as productsOrderMigration from "./src/migrations/20260613_000001_products_order";
+import * as featuresMigration from "./src/migrations/20260613_000002_features";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -38,6 +43,10 @@ export default buildConfig({
     BreadItems,
     Bookings,
     Orders,
+    Suppliers,
+    Activities,
+    News,
+    Settings,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || "change-me-in-production",
@@ -71,6 +80,11 @@ export default buildConfig({
             name: "20260613_000001_products_order",
             up: productsOrderMigration.up,
             down: productsOrderMigration.down,
+          },
+          {
+            name: "20260613_000002_features",
+            up: featuresMigration.up,
+            down: featuresMigration.down,
           },
         ],
       })

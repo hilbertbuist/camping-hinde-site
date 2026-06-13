@@ -54,6 +54,12 @@ export const BreadItems: CollectionConfig = {
       ],
     },
     {
+      name: "supplier",
+      type: "relationship",
+      relationTo: "suppliers" as never,
+      label: "Leverancier",
+    },
+    {
       name: "order",
       type: "number",
       label: "Volgorde",

@@ -2,7 +2,11 @@
 
 import { headers } from "next/headers";
 import { payload } from "@/lib/payload";
-import { getMollie, isMollieConfigured } from "@/lib/mollie";
+import { getMollieForMode } from "@/lib/mollie";
+import { getSettings } from "@/lib/settings";
+
+const MOLLIE_NOT_CONFIGURED =
+  "Mollie is nog niet gekoppeld — stel de sleutel in Vercel in.";
 
 export type CreateOrderResult = {
   ok: boolean;
@@ -81,20 +85,11 @@ export async function createShopOrder(
       return { ok: true, orderId: String(order.id) };
     }
 
-    // Mollie payment
-    if (!isMollieConfigured()) {
-      // Dev mode: skip Mollie, mark as paid directly
-      await p.update({
-        collection: "orders",
-        id: order.id,
-        data: { paymentStatus: "paid" },
-      });
-      return { ok: true, orderId: String(order.id) };
-    }
-
-    const mollie = getMollie();
+    // Mollie payment — sleutel/modus uit instellingen
+    const { molliePaymentMode } = await getSettings();
+    const mollie = getMollieForMode(molliePaymentMode);
     if (!mollie) {
-      return { ok: false, error: "Betaalprovider niet beschikbaar." };
+      return { ok: false, error: MOLLIE_NOT_CONFIGURED };
     }
 
     const headersList = await headers();
@@ -187,18 +182,10 @@ export async function createBreadOrder(
       return { ok: true, orderId: String(order.id) };
     }
 
-    if (!isMollieConfigured()) {
-      await p.update({
-        collection: "orders",
-        id: order.id,
-        data: { paymentStatus: "paid" },
-      });
-      return { ok: true, orderId: String(order.id) };
-    }
-
-    const mollie = getMollie();
+    const { molliePaymentMode } = await getSettings();
+    const mollie = getMollieForMode(molliePaymentMode);
     if (!mollie) {
-      return { ok: false, error: "Betaalprovider niet beschikbaar." };
+      return { ok: false, error: MOLLIE_NOT_CONFIGURED };
     }
     const headersList = await headers();
     const host = headersList.get("host") ?? "localhost:3000";
@@ -258,22 +245,10 @@ export async function payOpenTab(formData: FormData): Promise<CreateOrderResult>
 
     const total = open.docs.reduce((sum, o) => sum + o.total, 0);
 
-    if (!isMollieConfigured()) {
-      await Promise.all(
-        open.docs.map((o) =>
-          p.update({
-            collection: "orders",
-            id: o.id,
-            data: { paymentStatus: "paid" },
-          })
-        )
-      );
-      return { ok: true };
-    }
-
-    const mollie = getMollie();
+    const { molliePaymentMode } = await getSettings();
+    const mollie = getMollieForMode(molliePaymentMode);
     if (!mollie) {
-      return { ok: false, error: "Betaalprovider niet beschikbaar." };
+      return { ok: false, error: MOLLIE_NOT_CONFIGURED };
     }
     const headersList = await headers();
     const host = headersList.get("host") ?? "localhost:3000";

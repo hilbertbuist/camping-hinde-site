@@ -7,15 +7,18 @@ import {
   ShoppingBag,
   Croissant,
   Receipt,
+  CalendarDays,
+  Newspaper,
   LogOut,
   ChevronRight,
 } from "lucide-react";
 import type { GuestSession } from "../actions";
-import { OP_REKENING_ENABLED } from "@/lib/winkel/config";
+import { fetchOpRekeningEnabled } from "@/app/(frontend)/winkel/settings-actions";
 
 export default function CamperMenuPage() {
   const router = useRouter();
   const [booking, setBooking] = useState<GuestSession | null>(null);
+  const [opRekening, setOpRekening] = useState(false);
 
   useEffect(() => {
     const raw = localStorage.getItem("hinde:booking");
@@ -29,6 +32,7 @@ export default function CamperMenuPage() {
       localStorage.removeItem("hinde:booking");
       router.replace("/winkel/camping");
     }
+    fetchOpRekeningEnabled().then(setOpRekening).catch(() => setOpRekening(false));
   }, [router]);
 
   const logout = () => {
@@ -89,7 +93,21 @@ export default function CamperMenuPage() {
             subtitle="Bestellen voor 20:00, bezorgen om 8:30"
             accent="oranje"
           />
-          {OP_REKENING_ENABLED && (
+          <MenuLink
+            href="/winkel/camping/activiteiten"
+            icon={CalendarDays}
+            title="Activiteiten"
+            subtitle="Het animatieprogramma van de camping"
+            accent="groen"
+          />
+          <MenuLink
+            href="/winkel/camping/nieuws"
+            icon={Newspaper}
+            title="Nieuws & mededelingen"
+            subtitle="Het laatste nieuws van De Hinde"
+            accent="oranje"
+          />
+          {opRekening && (
             <MenuLink
               href="/winkel/camping/rekening"
               icon={Receipt}
