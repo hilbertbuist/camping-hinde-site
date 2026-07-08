@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#F4A52B" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Klusjes-Rad" />
+<title>🎡 Klusjes-Rad — wie doet vandaag welk klusje?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎡%3C/text%3E%3C/svg%3E" />
+<style>
+  :root {
+    --paars: #5A1F6B;
+    --paars-donker: #3D1448;
+    --groen: #7DB332;
+    --groen-donker: #5C8E22;
+    --oranje: #F4A52B;
+    --oranje-donker: #d98a10;
+    --blauw: #8DC8E8;
+    --roze: #EC6A9C;
+    --creme: #FFF9EF;
+    --wit: #FFFFFF;
+    --tekst: #2A2320;
+    --grijs: #8B8580;
+    --rand: #EEE6D6;
+    --schaduw: 0 10px 30px -12px rgba(90,31,107,.35);
+    --wheel: [];
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--tekst);
+    background:
+      radial-gradient(1200px 500px at 50% -10%, #FFE7B8 0%, transparent 60%),
+      radial-gradient(900px 500px at 100% 10%, #CFEBF9 0%, transparent 55%),
+      var(--creme);
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 18px 16px 120px; }
+
+  /* Header */
+  header { text-align: center; padding: 10px 0 6px; }
+  .kicker {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--oranje); color: #4a2c00;
+    font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    padding: 6px 14px; border-radius: 999px; box-shadow: var(--schaduw);
+    transform: rotate(-2deg);
+  }
+  h1 {
+    font-size: clamp(30px, 9vw, 44px); margin: 12px 0 2px; line-height: 1;
+    font-weight: 900; letter-spacing: -.02em; color: var(--paars);
+  }
+  .sub { color: var(--grijs); font-size: 15px; margin: 2px 0 0; font-weight: 500; }
+
+  /* Tabs */
+  .tabs {
+    display: flex; gap: 6px; background: #fff; border: 1px solid var(--rand);
+    padding: 6px; border-radius: 999px; margin: 18px 0 6px; box-shadow: var(--schaduw);
+  }
+  .tab {
+    flex: 1; border: 0; background: transparent; cursor: pointer;
+    padding: 11px 6px; border-radius: 999px; font-size: 14px; font-weight: 800;
+    color: var(--grijs); transition: .2s; font-family: inherit;
+  }
+  .tab.active { background: var(--paars); color: #fff; box-shadow: 0 6px 16px -8px var(--paars); }
+
+  .panel { display: none; animation: fade .3s ease; }
+  .panel.active { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .card {
+    background: #fff; border: 1px solid var(--rand); border-radius: 22px;
+    padding: 18px; margin-top: 16px; box-shadow: var(--schaduw);
+  }
+  .card h2 { margin: 0 0 4px; font-size: 19px; font-weight: 900; color: var(--paars); }
+  .card .hint { margin: 0 0 14px; color: var(--grijs); font-size: 13px; }
+
+  /* Inputs */
+  .row { display: flex; gap: 8px; }
+  input[type=text] {
+    flex: 1; min-width: 0; font-size: 16px; font-family: inherit; color: var(--tekst);
+    border: 2px solid var(--rand); border-radius: 14px; padding: 12px 14px; background: var(--creme);
+    transition: .15s;
+  }
+  input[type=text]:focus { outline: 0; border-color: var(--oranje); background: #fff; }
+  .btn {
+    border: 0; cursor: pointer; font-family: inherit; font-weight: 800; font-size: 15px;
+    border-radius: 14px; padding: 12px 18px; color: #fff; background: var(--groen);
+    box-shadow: 0 6px 16px -8px var(--groen-donker); transition: transform .12s, filter .12s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn:active { transform: translateY(1px) scale(.98); }
+  .btn.full { width: 100%; }
+  .btn.oranje { background: var(--oranje); box-shadow: 0 6px 16px -8px var(--oranje-donker); color: #4a2c00; }
+  .btn.paars { background: var(--paars); box-shadow: 0 6px 16px -8px var(--paars); }
+  .btn.wa { background: #25D366; box-shadow: 0 6px 16px -8px #128C7E; }
+  .btn.ghost { background: transparent; color: var(--paars); box-shadow: none; border: 2px solid var(--rand); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .btn.lg { font-size: 18px; padding: 16px 22px; }
+
+  /* Chips lists */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px; padding: 8px 8px 8px 14px;
+    border-radius: 999px; font-weight: 700; font-size: 14px; background: var(--creme);
+    border: 1.5px solid var(--rand);
+  }
+  .chip .dot { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgba(0,0,0,.12); }
+  .chip .x {
+    width: 24px; height: 24px; border-radius: 50%; border: 0; cursor: pointer; font-size: 15px; line-height: 1;
+    background: rgba(0,0,0,.06); color: #7a5; color: #a33; font-weight: 900; display: grid; place-items: center;
+  }
+  .chip.member { background: #fff; }
+  .empty { color: var(--grijs); font-size: 14px; font-style: italic; margin-top: 12px; }
+
+  /* Wheel */
+  .wheel-stage { position: relative; width: min(340px, 82vw); aspect-ratio: 1; margin: 6px auto 4px; }
+  .wheel-stage canvas { width: 100%; height: 100%; display: block; border-radius: 50%;
+    box-shadow: 0 18px 40px -14px rgba(90,31,107,.5), inset 0 0 0 8px #fff; background: #fff; }
+  .pointer {
+    position: absolute; top: -6px; left: 50%; transform: translateX(-50%); z-index: 3;
+    width: 0; height: 0; border-left: 17px solid transparent; border-right: 17px solid transparent;
+    border-top: 30px solid var(--paars); filter: drop-shadow(0 3px 3px rgba(0,0,0,.25));
+  }
+  .hub {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 2;
+    width: 54px; height: 54px; border-radius: 50%; background: #fff; border: 4px solid var(--oranje);
+    display: grid; place-items: center; font-size: 24px; box-shadow: 0 4px 10px rgba(0,0,0,.2);
+  }
+  .now-task {
+    text-align: center; font-weight: 800; font-size: 17px; color: var(--paars-donker);
+    background: #fff; border: 2px dashed var(--oranje); border-radius: 16px; padding: 12px; margin: 4px 0 14px;
+  }
+  .now-task small { display: block; color: var(--grijs); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .1em; margin-bottom: 3px; }
+
+  /* Result list */
+  .assign { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 10px; }
+  .assign li {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px;
+    background: var(--creme); border: 1.5px solid var(--rand); animation: pop .35s ease both;
+  }
+  @keyframes pop { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: none; } }
+  .assign .who {
+    flex: 0 0 auto; font-weight: 900; color: #fff; padding: 6px 12px; border-radius: 999px; font-size: 14px; white-space: nowrap;
+  }
+  .assign .what { font-weight: 700; font-size: 15px; }
+  .assign .task-emoji { font-size: 20px; }
+
+  .toolbar { display: flex; gap: 8px; margin-top: 16px; }
+  .toolbar .btn { flex: 1; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); transform: translateX(-50%) translateY(20px);
+    background: var(--paars-donker); color: #fff; padding: 12px 20px; border-radius: 999px; font-weight: 700;
+    box-shadow: var(--schaduw); opacity: 0; pointer-events: none; transition: .3s; z-index: 50; font-size: 14px;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  footer { text-align: center; color: var(--grijs); font-size: 12px; margin-top: 28px; }
+
+  canvas.confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 40; }
+
+  .seg-help { text-align: center; color: var(--grijs); font-size: 13px; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="kicker">☀️ Vakantie-editie</span>
+    <h1>Klusjes-Rad</h1>
+    <p class="sub">Wie doet vandaag welk klusje? Laat het lot beslissen! 🎉</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="setup">📝 Instellen</button>
+    <button class="tab" data-tab="rad">🎡 Het Rad</button>
+    <button class="tab" data-tab="loting">🎟️ Snelle loting</button>
+  </div>
+
+  <!-- SETUP -->
+  <section class="panel active" id="panel-setup">
+    <div class="card">
+      <h2>👨‍👩‍👧‍👦 Gezinsleden</h2>
+      <p class="hint">Wie doen er mee? Iedereen krijgt een eigen kleur.</p>
+      <div class="row">
+        <input type="text" id="memberInput" placeholder="Naam, bijv. Sanne" maxlength="20" autocomplete="off" />
+        <button class="btn" id="addMember">Toevoegen</button>
+      </div>
+      <div class="chips" id="memberList"></div>
+    </div>
+
+    <div class="card">
+      <h2>🧹 Klusjes</h2>
+      <p class="hint">Welke taakjes moeten er gedaan worden? Tip: begin met een emoji.</p>
+      <div class="row">
+        <input type="text" id="taskInput" placeholder="Klusje, bijv. 🍽️ Afwassen" maxlength="40" autocomplete="off" />
+        <button class="btn oranje" id="addTask">Toevoegen</button>
+      </div>
+      <div class="chips" id="taskList"></div>
+      <div style="margin-top:16px">
+        <button class="btn ghost full" id="loadDemo">✨ Voorbeeld-klusjes invullen</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RAD -->
+  <section class="panel" id="panel-rad">
+    <div class="card">
+      <h2>🎡 Rad van Avontuur</h2>
+      <p class="hint">Draai het rad per klusje. Waar de pijl stopt, díe mag aan de bak!</p>
+      <div class="now-task" id="nowTask"><small>Klusje aan de beurt</small><span id="nowTaskName">—</span></div>
+      <div class="wheel-stage">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="600" height="600"></canvas>
+        <div class="hub">🎯</div>
+      </div>
+      <p class="seg-help" id="segHelp">Voeg eerst gezinsleden toe bij "Instellen".</p>
+      <button class="btn paars lg full" id="spinBtn" style="margin-top:12px">🎡 Draai het rad!</button>
+      <div class="toolbar">
+        <button class="btn ghost" id="skipTask">⏭️ Sla klusje over</button>
+        <button class="btn ghost" id="resetRad">↺ Opnieuw</button>
+      </div>
+    </div>
+
+    <div class="card" id="radResultCard" style="display:none">
+      <h2>📋 Verdeling tot nu toe</h2>
+      <ul class="assign" id="radAssignList"></ul>
+      <button class="btn wa full" id="shareRad" style="margin-top:16px">💬 Deel via WhatsApp</button>
+    </div>
+  </section>
+
+  <!-- LOTING -->
+  <section class="panel" id="panel-loting">
+    <div class="card">
+      <h2>🎟️ Snelle loting</h2>
+      <p class="hint">In één klik alle klusjes eerlijk verdelen over iedereen. Elke keer een nieuwe verrassing!</p>
+      <button class="btn oranje lg full" id="drawBtn">🎲 Trek de loting!</button>
+      <ul class="assign" id="lotAssignList" style="margin-top:16px"></ul>
+      <button class="btn wa full" id="shareLot" style="display:none; margin-top:16px">💬 Deel via WhatsApp</button>
+    </div>
+  </section>
+
+  <footer>Gemaakt met ☀️ voor een vrolijke vakantie — alles blijft privé op je telefoon.</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- State ----------
+  var COLORS = ["#5A1F6B", "#7DB332", "#F4A52B", "#EC6A9C", "#3B9AD1", "#E4572E", "#8E44AD", "#16A085", "#D35400", "#2C82C9"];
+  var LS_KEY = "klusjesrad.v1";
+  var state = load() || { members: [], tasks: [], radAssign: [], radIndex: 0 };
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)); } catch (e) { return null; }
+  }
+  function save() {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function $(id) { return document.getElementById(id); }
+
+  // ---------- Toast ----------
+  var toastTimer;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  // ---------- Tabs ----------
+  var tabs = document.querySelectorAll(".tab");
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function () {
+      tabs.forEach(function (t) { t.classList.remove("active"); });
+      tab.classList.add("active");
+      document.querySelectorAll(".panel").forEach(function (p) { p.classList.remove("active"); });
+      $("panel-" + tab.dataset.tab).classList.add("active");
+      if (tab.dataset.tab === "rad") { drawWheel(); updateNowTask(); }
+    });
+  });
+
+  // ---------- Members ----------
+  function addMember(name) {
+    name = (name || "").trim();
+    if (!name) return;
+    if (state.members.some(function (m) { return m.name.toLowerCase() === name.toLowerCase(); })) {
+      toast("Die naam staat er al 😉"); return;
+    }
+    var used = state.members.map(function (m) { return m.color; });
+    var color = COLORS.find(function (c) { return used.indexOf(c) === -1; }) || COLORS[state.members.length % COLORS.length];
+    state.members.push({ name: name, color: color });
+    save(); renderMembers(); drawWheel(); updateSegHelp();
+  }
+  function removeMember(i) {
+    state.members.splice(i, 1);
+    save(); renderMembers(); drawWheel(); updateSegHelp();
+  }
+  function renderMembers() {
+    var el = $("memberList");
+    if (!state.members.length) { el.innerHTML = '<p class="empty">Nog niemand toegevoegd.</p>'; return; }
+    el.innerHTML = state.members.map(function (m, i) {
+      return '<span class="chip member"><span class="dot" style="background:' + m.color + '"></span>' +
+        esc(m.name) + '<button class="x" data-i="' + i + '" data-kind="member" aria-label="Verwijder">×</button></span>';
+    }).join("");
+  }
+
+  // ---------- Tasks ----------
+  function addTask(text) {
+    text = (text || "").trim();
+    if (!text) return;
+    state.tasks.push(text);
+    save(); renderTasks(); updateNowTask();
+  }
+  function removeTask(i) {
+    state.tasks.splice(i, 1);
+    save(); renderTasks(); updateNowTask();
+  }
+  function renderTasks() {
+    var el = $("taskList");
+    if (!state.tasks.length) { el.innerHTML = '<p class="empty">Nog geen klusjes.</p>'; return; }
+    el.innerHTML = state.tasks.map(function (t, i) {
+      return '<span class="chip">' + esc(t) +
+        '<button class="x" data-i="' + i + '" data-kind="task" aria-label="Verwijder">×</button></span>';
+    }).join("");
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // Delegated remove
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".x"); if (!b) return;
+    var i = +b.dataset.i;
+    if (b.dataset.kind === "member") removeMember(i); else removeTask(i);
+  });
+
+  $("addMember").addEventListener("click", function () { addMember($("memberInput").value); $("memberInput").value = ""; $("memberInput").focus(); });
+  $("memberInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { addMember(this.value); this.value = ""; } });
+  $("addTask").addEventListener("click", function () { addTask($("taskInput").value); $("taskInput").value = ""; $("taskInput").focus(); });
+  $("taskInput").addEventListener("keydown", function (e) { if (e.key === "Enter") { addTask(this.value); this.value = ""; } });
+
+  $("loadDemo").addEventListener("click", function () {
+    var demo = ["🍽️ Afwassen", "🗑️ Vuilnis buiten", "🧹 Stofzuigen", "🛏️ Bedden opmaken", "🚿 Badkamer poetsen", "🌱 Planten water geven", "🧺 Was opvouwen", "🐕 Hond uitlaten"];
+    demo.forEach(function (d) { if (state.tasks.indexOf(d) === -1) state.tasks.push(d); });
+    save(); renderTasks(); updateNowTask(); toast("Voorbeeld-klusjes toegevoegd ✨");
+  });
+
+  // ---------- Wheel ----------
+  var canvas = $("wheel"), ctx = canvas.getContext("2d");
+  var rotation = 0, spinning = false;
+
+  function drawWheel() {
+    var n = state.members.length, cx = 300, cy = 300, r = 292;
+    ctx.clearRect(0, 0, 600, 600);
+    if (n === 0) {
+      ctx.fillStyle = "#F0E9DA"; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = "#B7AE9C"; ctx.font = "600 26px system-ui"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("Voeg namen toe", cx, cy);
+      return;
+    }
+    var slice = 2 * Math.PI / n;
+    for (var i = 0; i < n; i++) {
+      var a0 = rotation + i * slice, a1 = a0 + slice;
+      ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
+      ctx.fillStyle = state.members[i].color; ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.6)"; ctx.lineWidth = 3; ctx.stroke();
+      // label
+      ctx.save();
+      ctx.translate(cx, cy); ctx.rotate(a0 + slice / 2);
+      ctx.fillStyle = "#fff"; ctx.font = "800 " + (n > 8 ? 20 : 26) + "px system-ui";
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      var label = state.members[i].name; if (label.length > 12) label = label.slice(0, 11) + "…";
+      ctx.shadowColor = "rgba(0,0,0,.25)"; ctx.shadowBlur = 4;
+      ctx.fillText(label, r - 24, 0);
+      ctx.restore();
+    }
+  }
+
+  function updateSegHelp() {
+    var el = $("segHelp");
+    if (!state.members.length) { el.textContent = 'Voeg eerst gezinsleden toe bij "Instellen".'; }
+    else { el.textContent = state.members.length + " naam" + (state.members.length === 1 ? "" : "en") + " op het rad."; }
+  }
+
+  function pendingTask() {
+    // First task not yet assigned in radAssign
+    var assignedTasks = state.radAssign.map(function (a) { return a.task; });
+    for (var i = 0; i < state.tasks.length; i++) {
+      if (assignedTasks.indexOf(state.tasks[i]) === -1) return state.tasks[i];
+    }
+    return null;
+  }
+
+  function updateNowTask() {
+    var t = pendingTask();
+    $("nowTaskName").textContent = t || "Alle klusjes verdeeld! 🎉";
+    $("spinBtn").disabled = !t || state.members.length === 0;
+    renderRadResult();
+  }
+
+  function spin() {
+    if (spinning) return;
+    if (!state.members.length) { toast("Voeg eerst gezinsleden toe"); return; }
+    var task = pendingTask();
+    if (!task) { toast("Alle klusjes zijn al verdeeld 🎉"); return; }
+    spinning = true; $("spinBtn").disabled = true;
+
+    var n = state.members.length, slice = 2 * Math.PI / n;
+    var winner = Math.floor(Math.random() * n);
+    // Pointer is at top (-90deg = -PI/2). We want the winner slice centered under the pointer.
+    var turns = 5 + Math.floor(Math.random() * 3);
+    var targetCenter = -Math.PI / 2; // pointer angle
+    // current slice i center = rotation + i*slice + slice/2 ; solve so winner center = targetCenter (mod 2PI) + turns
+    var finalRot = targetCenter - (winner * slice + slice / 2) + turns * 2 * Math.PI;
+    var startRot = rotation;
+    var dur = 3800, t0 = performance.now();
+
+    function frame(now) {
+      var p = Math.min(1, (now - t0) / dur);
+      var eased = 1 - Math.pow(1 - p, 3.2);
+      rotation = startRot + (finalRot - startRot) * eased;
+      drawWheel();
+      if (p < 1) { requestAnimationFrame(frame); }
+      else {
+        rotation = ((finalRot % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+        drawWheel();
+        spinning = false;
+        var m = state.members[winner];
+        state.radAssign.push({ member: m.name, color: m.color, task: task });
+        save();
+        confettiBurst();
+        toast("🎉 " + m.name + " → " + task);
+        updateNowTask();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  $("spinBtn").addEventListener("click", spin);
+
+  $("skipTask").addEventListener("click", function () {
+    var task = pendingTask();
+    if (!task) { toast("Niets meer om over te slaan"); return; }
+    // Move the pending task to the end so it's handled last
+    var idx = state.tasks.indexOf(task);
+    if (idx > -1) { state.tasks.splice(idx, 1); state.tasks.push(task); save(); }
+    updateNowTask();
+    toast("Klusje overgeslagen ⏭️");
+  });
+
+  $("resetRad").addEventListener("click", function () {
+    state.radAssign = []; save(); updateNowTask(); toast("Rad-verdeling gewist");
+  });
+
+  function renderRadResult() {
+    var card = $("radResultCard"), list = $("radAssignList");
+    if (!state.radAssign.length) { card.style.display = "none"; return; }
+    card.style.display = "block";
+    list.innerHTML = state.radAssign.map(function (a) { return assignRow(a.member, a.color, a.task); }).join("");
+  }
+
+  // ---------- Loting ----------
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  var lastLot = [];
+  function draw() {
+    if (!state.members.length) { toast("Voeg eerst gezinsleden toe"); return; }
+    if (!state.tasks.length) { toast("Voeg eerst klusjes toe"); return; }
+    var tasks = shuffle(state.tasks);
+    var members = shuffle(state.members);
+    lastLot = tasks.map(function (t, i) {
+      var m = members[i % members.length];
+      return { member: m.name, color: m.color, task: t };
+    });
+    var list = $("lotAssignList");
+    list.innerHTML = lastLot.map(function (a, i) {
+      return assignRow(a.member, a.color, a.task, i);
+    }).join("");
+    $("shareLot").style.display = "block";
+    confettiBurst();
+    toast("Loting getrokken! 🎲");
+  }
+  $("drawBtn").addEventListener("click", draw);
+
+  function assignRow(member, color, task, i) {
+    var delay = i != null ? ' style="animation-delay:' + (i * 60) + 'ms"' : "";
+    var m = task.match(/^(\p{Emoji_Presentation}|\p{Extended_Pictographic})\s*/u);
+    var emoji = m ? m[1] : "✅";
+    var text = m ? task.slice(m[0].length) : task;
+    return '<li' + delay + '><span class="who" style="background:' + color + '">' + esc(member) + '</span>' +
+      '<span class="task-emoji">' + emoji + '</span><span class="what">' + esc(text) + '</span></li>';
+  }
+
+  // ---------- WhatsApp share ----------
+  function buildMessage(assign, titleMode) {
+    var d = new Date();
+    var dagen = ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"];
+    var header = "🎡 *Klusjes van vandaag* (" + dagen[d.getDay()] + ")\n" +
+                 (titleMode === "loot" ? "🎟️ Vers geloot!\n" : "🎯 Bepaald met het rad!\n") + "\n";
+    var lines = assign.map(function (a) { return "• " + a.task + " → *" + a.member + "*"; }).join("\n");
+    var footer = "\n\nVeel plezier & fijne vakantie! ☀️🎉";
+    return header + lines + footer;
+  }
+
+  function share(assign, mode) {
+    if (!assign.length) { toast("Nog niets om te delen"); return; }
+    var msg = buildMessage(assign, mode);
+    if (navigator.share) {
+      navigator.share({ text: msg }).catch(function () { openWa(msg); });
+    } else {
+      openWa(msg);
+    }
+  }
+  function openWa(msg) {
+    window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+  }
+
+  $("shareRad").addEventListener("click", function () { share(state.radAssign, "rad"); });
+  $("shareLot").addEventListener("click", function () { share(lastLot, "loot"); });
+
+  // ---------- Confetti ----------
+  var cc = $("confetti"), cctx = cc.getContext("2d"), parts = [], raf = null;
+  function sizeConfetti() { cc.width = innerWidth; cc.height = innerHeight; }
+  addEventListener("resize", sizeConfetti); sizeConfetti();
+  function confettiBurst() {
+    var cols = ["#5A1F6B", "#7DB332", "#F4A52B", "#EC6A9C", "#3B9AD1"];
+    for (var i = 0; i < 90; i++) {
+      parts.push({
+        x: innerWidth / 2 + (Math.random() - .5) * 120,
+        y: innerHeight / 2,
+        vx: (Math.random() - .5) * 9,
+        vy: -(6 + Math.random() * 9),
+        g: .28 + Math.random() * .12,
+        s: 6 + Math.random() * 7,
+        col: cols[Math.floor(Math.random() * cols.length)],
+        rot: Math.random() * 6, vr: (Math.random() - .5) * .4, life: 0
+      });
+    }
+    if (!raf) raf = requestAnimationFrame(tick);
+  }
+  function tick() {
+    cctx.clearRect(0, 0, cc.width, cc.height);
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i];
+      p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      cctx.save(); cctx.translate(p.x, p.y); cctx.rotate(p.rot);
+      cctx.fillStyle = p.col; cctx.fillRect(-p.s / 2, -p.s / 2, p.s, p.s * .6);
+      cctx.restore();
+      if (p.y > cc.height + 40 || p.life > 220) parts.splice(i, 1);
+    }
+    if (parts.length) { raf = requestAnimationFrame(tick); } else { raf = null; cctx.clearRect(0, 0, cc.width, cc.height); }
+  }
+
+  // ---------- Init ----------
+  renderMembers(); renderTasks(); drawWheel(); updateSegHelp(); updateNowTask();
+})();
+</script>
+</body>
+</html>
